@@ -1,0 +1,22 @@
+/* index.css or App.css */
+@import "tailwindcss";
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+#root {
+  width: 100%;
+  min-height: 100vh; /* Ensure the app takes at least the full viewport height */
+}
+
+.App {
+  width: 100vw; /* Full viewport width */
+  max-width: 100%; /* Prevent overflow */
+}
+
+/* Styles for child components */
+.Header, .Hero, .Features, .ProductShowcase, .Footer {
+  width: 100vw; /* Full viewport width */
+  max-width: 100%; /* Ensure no overflow */
+}
