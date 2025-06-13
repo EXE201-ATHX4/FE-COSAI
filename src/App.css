@@ -20,3 +20,39 @@
   width: 100vw; /* Full viewport width */
   max-width: 100%; /* Ensure no overflow */
 }
+
+/* App.css */
+
+/* Trạng thái khi component đang vào (trước khi vào hoàn toàn) */
+.fade-enter {
+  opacity: 0;
+  transform: translateX(100%); /* Bắt đầu từ bên phải */
+}
+
+/* Trạng thái khi component đang vào (trong quá trình vào) */
+.fade-enter-active {
+  opacity: 1;
+  transform: translateX(0); /* Di chuyển vào vị trí */
+  transition: opacity 300ms ease-in, transform 300ms ease-in; /* Thời gian phải khớp với timeout */
+}
+
+/* Trạng thái khi component đang thoát (trước khi thoát hoàn toàn) */
+.fade-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Trạng thái khi component đang thoát (trong quá trình thoát) */
+.fade-exit-active {
+  opacity: 0;
+  transform: translateX(-100%); /* Di chuyển ra bên trái */
+  transition: opacity 300ms ease-out, transform 300ms ease-out; /* Thời gian phải khớp với timeout */
+  position: absolute; /* Quan trọng để tránh layout shift khi 2 trang cùng tồn tại trong transition */
+  width: 100%; /* Đảm bảo chiều rộng đúng */
+}
+
+/* Đảm bảo phần tử cha của CSSTransition có position: relative */
+.App {
+  position: relative;
+  overflow-x: hidden; /* Tránh thanh cuộn ngang khi trang di chuyển */
+}
