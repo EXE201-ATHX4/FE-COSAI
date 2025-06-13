@@ -1,11 +1,14 @@
-import React from 'react';
-import './App.css'; // Import the CSS file
-import Home from './views/Home';
+import React from "react";
+import "./App.css";
+import AppRouter from "./router";
+import { AnimatePresence } from "framer-motion";
 
 function App() {
   return (
-    <div className="App"> {/* Add a className for styling */}
-      <Home/>
+    <div className="App">
+      <AnimatePresence mode="wait">
+        <AppRouter />
+      </AnimatePresence>
     </div>
   );
 }

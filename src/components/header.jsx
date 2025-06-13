@@ -26,9 +26,11 @@ import {
   Support as SupportIcon
 } from '@mui/icons-material';
 import SearchBar from './SearchBar';
+import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const navigation = useNavigate();
 
   const handleSearch = () => {
     console.log('Tìm kiếm:', searchQuery);
@@ -39,6 +41,8 @@ export const Header = () => {
       handleSearch();
     }
   };
+
+  
 
   return (
     <AppBar 
@@ -63,6 +67,7 @@ export const Header = () => {
           {/* Navigation Menu */}
           <Box sx={{ display: 'flex', gap: 3, marginRight: 'auto' }}>
             <Button 
+              onClick={() => navigation('/home')}
               color="inherit" 
               sx={{ 
                 fontSize: '1rem',
@@ -80,6 +85,8 @@ export const Header = () => {
               TRANG CHỦ
             </Button>
             <Button 
+              // Thêm điều hướng cho SẢN PHẨM nếu có route
+              onClick={() => navigation('/sanpham')}
               color="inherit" 
               sx={{ 
                 fontSize: '1rem',
@@ -97,6 +104,7 @@ export const Header = () => {
               SẢN PHẨM
             </Button>
             <Button 
+              onClick={() => navigation('/cosai')}
               color="inherit" 
               sx={{ 
                 fontSize: '1rem',

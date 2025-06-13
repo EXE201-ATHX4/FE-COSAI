@@ -11,7 +11,11 @@ import {
   useTheme,
   useMediaQuery,
   IconButton,
+  Stack,
+  Pagination,
 } from "@mui/material";
+import { motion } from "framer-motion";
+
 import {
   Star as StarIcon,
   ArrowForward as ArrowForwardIcon,
@@ -140,6 +144,64 @@ const CombinedBeautyLayout = () => {
     },
   ];
 
+  const articles = [
+    {
+      id: 1,
+      title: "LỢI ÍCH CỦA MỸ PHẨM THIÊN NHIÊN CHO LÀN DA",
+      description:
+        "Khám phá những ưu điểm vượt trội của mỹ phẩm thiên nhiên: giảm kích ứng, nuôi dưỡng làn da và duy trì vẻ đẹp tự nhiên, phù hợp với mọi loại da.",
+      image:
+        "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=200&fit=crop&crop=center",
+    },
+    {
+      id: 2,
+      title: "CÁCH CHỌN MỸ PHẨM THIÊN NHIÊN PHÙ HỢP VỚI BẠN",
+      description:
+        "Tìm hiểu cách lựa chọn sản phẩm thiên nhiên đúng với nhu cầu của bạn, với hướng dẫn từ chuyên gia giúp tối ưu hóa hiệu quả chăm sóc da hàng ngày.",
+      image:
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop&crop=center",
+    },
+    {
+      id: 3,
+      title: "XU HƯỚNG MỸ PHẨM THIÊN NHIÊN & CÔNG NGHỆ AI",
+      description:
+        "Cập nhật xu hướng mới năm 2025 khi mỹ phẩm thiên nhiên kết hợp cùng công nghệ AI phân tích da, mang lại trải nghiệm cá nhân hóa và tối ưu cho làn da.",
+      image:
+        "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=300&h=200&fit=crop&crop=center",
+    },
+    {
+      id: 4,
+      title: "REVIEW SẢN PHẨM: TOP MỸ PHẨM THIÊN NHIÊN NỔI BẬT",
+      description:
+        "Đánh giá và tổng hợp những sản phẩm thiên nhiên được yêu thích nhất năm 2025, với chia sẻ kinh nghiệm từ người dùng thực tế để bạn tự tin lựa chọn.",
+      image:
+        "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=300&h=200&fit=crop&crop=center",
+    },
+  ];
+
+  const partners = [
+    {
+      name: "The Cocoon",
+      logo: "https://cocoon.byethost14.com/wp-content/uploads/2022/10/cropped-a98068ef680cf8d961db66bef1e1b3b7.png",
+    },
+    {
+      name: "Comem Home Lab",
+      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlc3KWvm4Wm3nvG5tz3HSxprvCVO0EViDKAQ&s",
+    },
+    {
+      name: "Aromatica",
+      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT0IfyEG1e-4ZTVvFp4TBh0wkG6gr7DxP59A&s",
+    },
+    {
+      name: "Sukin",
+      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoUQCWMGUhWl2FJSOcceB-_hcBG8gKnFtKMA&s",
+    },
+    {
+      name: "Thorakao",
+      logo: "https://lanhao.vn/wp-content/uploads/2019/03/logo.png",
+    },
+  ];
+
   const [currentProduct, setCurrentProduct] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
   const theme = useTheme();
@@ -175,6 +237,13 @@ const CombinedBeautyLayout = () => {
 
   const product = cosmeticProducts[currentProduct];
   return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.5 }}
+      style={{ minHeight: '100vh', background: '#f2eee5' }}
+    >
     <Box sx={{ width: "100%", position: "relative" }}>
       {/* Hero Section */}
       <Box
@@ -321,30 +390,6 @@ const CombinedBeautyLayout = () => {
             </Grid>
           </Grid>
         </Container>
-
-        {/* Small green text overlay */}
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: "100px",
-            left: "50px",
-            backgroundColor: "rgba(255,255,255,0.1)",
-            padding: "8px 16px",
-            borderRadius: "20px",
-            backdropFilter: "blur(10px)",
-          }}
-        >
-          <Typography
-            variant="body2"
-            sx={{
-              color: "#FFFFFF",
-              fontSize: "0.8rem",
-              fontWeight: "500",
-            }}
-          >
-            Alive every moment
-          </Typography>
-        </Box>
       </Box>
 
       {/* Beauty Section */}
@@ -1103,6 +1148,7 @@ const CombinedBeautyLayout = () => {
                     fontSize: { xs: "2.5rem", md: "3.5rem" },
                     lineHeight: 1.1,
                     textShadow: "2px 2px 4px rgba(0,0,0,0.1)",
+                    fontFamily: "Anton",
                   }}
                 >
                   {product.mainTitle}
@@ -1346,6 +1392,230 @@ const CombinedBeautyLayout = () => {
           </Grid>
         </Container>
       </Box>
+<Box sx={{ backgroundColor: '#52B788', padding: '60px 0' }}>
+        <Container maxWidth="xl">
+          <Typography
+            variant="h4"
+            sx={{
+              color: '#FFFFFF',
+              fontWeight: 700,
+              textAlign: 'left',
+              marginBottom: '40px',
+              fontSize: { xs: '1.5rem', md: '1.8rem' },
+              textTransform: 'uppercase',
+              letterSpacing: '1px'
+            }}
+          >
+            BÀI VIẾT MỚI NHẤT
+          </Typography>
+
+          {/* Wrapper cho cuộn ngang */}
+          <Box
+            sx={{
+              display: 'flex',
+              overflowX: 'auto', // Cho phép cuộn ngang
+              gap: '24px', // Khoảng cách giữa các thẻ (spacing)
+              paddingBottom: '20px', // Đảm bảo có khoảng trống cho scrollbar nếu hiển thị
+              // Ẩn scrollbar cho Webkit browsers (Chrome, Safari)
+              '&::-webkit-scrollbar': {
+                height: '8px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                borderRadius: '4px',
+              },
+              '&::-webkit-scrollbar-track': {
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              },
+            }}
+          >
+            {articles.map((article) => (
+              <Card
+                key={article.id}
+                sx={{
+                  flexShrink: 0, // Quan trọng: Ngăn không cho thẻ bị co lại
+                  width: { xs: '280px', sm: '320px', md: '300px' }, // Đặt chiều rộng cố định cho mỗi thẻ
+                  height: 'auto', // Chiều cao tự động
+                  display: 'flex',
+                  flexDirection: 'column',
+                  cursor: 'pointer',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                  },
+                }}
+              >
+                <CardMedia
+                  sx={{ height: 160 }}
+                  image={article.image}
+                  title={article.title}
+                />
+                <CardContent
+                  sx={{
+                    flexGrow: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    padding: '16px',
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: { xs: '0.85rem', md: '0.9rem' },
+                      lineHeight: 1.3,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                      marginBottom: '8px',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {article.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontSize: { xs: '0.75rem', md: '0.8rem' },
+                      lineHeight: 1.4,
+                      color: '#666',
+                      marginBottom: '12px',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      flexGrow: 1,
+                    }}
+                  >
+                    {article.description}
+                  </Typography>
+                  <Button
+                    variant="text"
+                    sx={{
+                      color: '#52B788',
+                      fontWeight: 600,
+                      fontSize: { xs: '0.75rem', md: '0.85rem' },
+                      padding: 0,
+                      justifyContent: 'flex-start',
+                      textTransform: 'none',
+                      '&:hover': {
+                        backgroundColor: 'transparent',
+                        textDecoration: 'underline',
+                      },
+                    }}
+                  >
+                    Xem thêm
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </Box>
+
+          {/* Pagination - vẫn giữ nguyên như cũ, nằm dưới danh sách cuộn ngang */}
+          <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+            <Pagination
+              count={8}
+              page={1}
+              variant="outlined"
+              shape="rounded"
+              sx={{
+                '& .MuiPaginationItem-root': {
+                  color: '#FFFFFF',
+                  borderColor: '#FFFFFF',
+                  minWidth: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  fontWeight: 600,
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  },
+                  '&.Mui-selected': {
+                    backgroundColor: '#FFFFFF',
+                    color: '#52B788',
+                    borderColor: '#FFFFFF',
+                    '&:hover': {
+                      backgroundColor: '#FFFFFF',
+                    },
+                  },
+                },
+                '& .MuiPaginationItem-ellipsis': {
+                    color: '#FFFFFF',
+                },
+                '& .MuiPaginationItem-icon': {
+                    color: '#FFFFFF',
+                }
+              }}
+            />
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Partners Section - Vẫn giữ nguyên */}
+      <Box sx={{ padding: '60px 0', backgroundColor: '#F8F9FA' }}>
+        <Container maxWidth="xl">
+          <Typography
+            variant="h4"
+            sx={{
+              color: '#333',
+              fontWeight: 700,
+              textAlign: 'center',
+              marginBottom: '40px',
+              fontSize: { xs: '1.5rem', md: '1.8rem' },
+              textTransform: 'uppercase',
+              letterSpacing: '1px'
+            }}
+          >
+            ĐỐI TÁC CỦA CHÚNG TÔI
+          </Typography>
+          
+          <Paper
+            elevation={0}
+            sx={{
+              border: '2px dashed #52B788',
+              borderRadius: '12px',
+              padding: { xs: '20px', md: '40px' },
+              backgroundColor: '#FFFFFF',
+            }}
+          >
+            <Grid container spacing={4} justifyContent="center" alignItems="center">
+              {partners.map((partner, index) => (
+                <Grid item xs={6} sm={4} md={2} key={index}>
+                  <Box sx={{ 
+                    textAlign: 'center', 
+                    display: 'flex', 
+                    justifyContent: 'center', 
+                    alignItems: 'center', 
+                    height: '80px'
+                  }}>
+                    <Box
+                      component="img"
+                      src={partner.logo}
+                      alt={partner.name}
+                      sx={{
+                        maxHeight: '80px',
+                        width: 'auto',
+                        objectFit: 'contain',
+                        filter: 'grayscale(100%)',
+                        transition: 'filter 0.3s ease, transform 0.2s ease',
+                        '&:hover': {
+                          filter: 'grayscale(0%)',
+                          transform: 'scale(1.05)',
+                        },
+                      }}
+                    />
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </Paper>
+        </Container>
+      </Box>
     </Box>
+    </motion.div>
   );
 };
