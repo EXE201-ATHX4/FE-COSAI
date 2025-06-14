@@ -16,6 +16,8 @@ import {
   Checkbox,
   Radio,
   RadioGroup,
+  Autocomplete,
+  TextField,
   Chip,
 } from "@mui/material";
 import {
@@ -217,177 +219,80 @@ function ProductList() {
       <Paper
         sx={{
           mb: 4,
-          borderRadius: 1,
-          overflow: "hidden",
+          borderRadius: 2,
+          overflow: "visible",
           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+          p: 2,
         }}
       >
-        <Grid container>
-          {/* Bộ lọc thương hiệu */}
-          <Grid
-            item
-            xs={12}
-            md={4}
-            sx={{ borderRight: { md: "1px solid #eee" } }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                p: 2,
-                cursor: "pointer",
-              }}
-              onClick={() => handleToggleFilter("brand")}
-            >
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <CircleIcon sx={{ color: "#0a5c36", mr: 1 }} />
-                <Typography>Thương hiệu (Brand)</Typography>
-              </Box>
-              <IconButton size="small">
-                {expandedFilters.brand ? (
-                  <KeyboardArrowUpIcon />
-                ) : (
-                  <KeyboardArrowDownIcon />
-                )}
-              </IconButton>
-            </Box>
-            <Collapse in={expandedFilters.brand}>
-              <Box sx={{ p: 2, pt: 0, maxHeight: "200px", overflowY: "auto" }}>
-                <FormGroup>
-                  {brands.map((brand) => (
-                    <FormControlLabel
-                      key={brand}
-                      control={
-                        <Checkbox
-                          checked={filters.brands.includes(brand)}
-                          onChange={() => handleBrandChange(brand)}
-                          size="small"
-                        />
-                      }
-                      label={brand}
-                    />
-                  ))}
-                </FormGroup>
-              </Box>
-            </Collapse>
+        <Grid container spacing={2} alignItems="center">
+          {/* Thương hiệu */}
+          <Grid item size={{ xs: 12, sm: 3 }}>
+            <Autocomplete
+              multiple
+              options={brands}
+              value={filters.brands}
+              onChange={(event, newValue) =>
+                setFilters((prev) => ({ ...prev, brands: newValue }))
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Thương hiệu" size="small" />
+              )}
+            />
           </Grid>
 
-          {/* Bộ lọc giá cả */}
-          <Grid
-            item
-            xs={12}
-            md={4}
-            sx={{ borderRight: { md: "1px solid #eee" } }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                p: 2,
-                cursor: "pointer",
-              }}
-              onClick={() => handleToggleFilter("price")}
-            >
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <CircleIcon sx={{ color: "#0a5c36", mr: 1 }} />
-                <Typography>Giá cả (Price)</Typography>
-              </Box>
-              <IconButton size="small">
-                {expandedFilters.price ? (
-                  <KeyboardArrowUpIcon />
-                ) : (
-                  <KeyboardArrowDownIcon />
-                )}
-              </IconButton>
-            </Box>
-            <Collapse in={expandedFilters.price}>
-              <Box sx={{ p: 2, pt: 0 }}>
-                <RadioGroup
-                  value={filters.priceRange || ""}
-                  onChange={handlePriceRangeChange}
-                >
-                  {priceRanges.map((range) => (
-                    <FormControlLabel
-                      key={range.id}
-                      value={range.id.toString()}
-                      control={<Radio size="small" />}
-                      label={range.label}
-                    />
-                  ))}
-                </RadioGroup>
-              </Box>
-            </Collapse>
+          {/* Giá cả */}
+          <Grid item size={{ xs: 12, sm: 3 }}>
+            <Autocomplete
+              options={priceRanges}
+              getOptionLabel={(option) => option.label}
+              value={
+                priceRanges.find((r) => r.id === filters.priceRange) || null
+              }
+              onChange={(event, newValue) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  priceRange: newValue?.id || null,
+                }))
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Giá cả" size="small" />
+              )}
+            />
           </Grid>
 
-          {/* Bộ lọc phân loại */}
-          <Grid item xs={12} md={4}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                p: 2,
-                cursor: "pointer",
-              }}
-              onClick={() => handleToggleFilter("category")}
-            >
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <CircleIcon sx={{ color: "#0a5c36", mr: 1 }} />
-                <Typography>Phân loại (Type)</Typography>
-              </Box>
-              <IconButton size="small">
-                {expandedFilters.category ? (
-                  <KeyboardArrowUpIcon />
-                ) : (
-                  <KeyboardArrowDownIcon />
-                )}
-              </IconButton>
-            </Box>
-            <Collapse in={expandedFilters.category}>
-              <Box sx={{ p: 2, pt: 0, maxHeight: "200px", overflowY: "auto" }}>
-                <FormGroup>
-                  {categories.map((category) => (
-                    <FormControlLabel
-                      key={category}
-                      control={
-                        <Checkbox
-                          checked={filters.categories.includes(category)}
-                          onChange={() => handleCategoryChange(category)}
-                          size="small"
-                        />
-                      }
-                      label={category}
-                    />
-                  ))}
-                </FormGroup>
-              </Box>
-            </Collapse>
+          {/* Phân loại */}
+          <Grid item size={{ xs: 12, sm: 3 }}>
+            <Autocomplete
+              multiple
+              options={categories}
+              value={filters.categories}
+              onChange={(event, newValue) =>
+                setFilters((prev) => ({ ...prev, categories: newValue }))
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Phân loại" size="small" />
+              )}
+            />
           </Grid>
 
           {/* Nút tìm kiếm */}
           <Grid
             item
-            xs={12}
-            sx={{
-              bgcolor: "#0a5c36",
-              color: "white",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              p: 2,
-            }}
+            size={{ xs: 12, sm: 3 }}
+            sx={{ textAlign: { xs: "center", sm: "right" } }}
           >
             <Button
               variant="contained"
               onClick={handleSearch}
               startIcon={<FilterListIcon />}
               sx={{
-                bgcolor: "#fff",
-                color: "#0a5c36",
-                "&:hover": { bgcolor: "#f0f0f0" },
+                bgcolor: "#0a5c36",
+                color: "#fff",
                 fontWeight: "bold",
+                "&:hover": {
+                  bgcolor: "#094a2c",
+                },
               }}
             >
               TÌM KIẾM
@@ -395,7 +300,6 @@ function ProductList() {
           </Grid>
         </Grid>
       </Paper>
-
       {/* Hiển thị bộ lọc đang hoạt động */}
       {activeFilters.length > 0 && (
         <Box
@@ -432,14 +336,12 @@ function ProductList() {
           )}
         </Box>
       )}
-
       {/* Hiển thị số lượng sản phẩm tìm thấy */}
       <Box sx={{ mb: 3 }}>
         <Typography variant="body1" sx={{ fontWeight: "medium" }}>
           Tìm thấy {filteredProducts.length} sản phẩm
         </Typography>
       </Box>
-
       {/* Danh sách sản phẩm */}
       <Grid container spacing={2}>
         {filteredProducts.map((product) => (
@@ -604,7 +506,6 @@ function ProductList() {
           </Grid>
         ))}
       </Grid>
-
       {/* Hiển thị thông báo khi không tìm thấy sản phẩm */}
       {filteredProducts.length === 0 && (
         <Box sx={{ textAlign: "center", py: 4 }}>
@@ -620,7 +521,6 @@ function ProductList() {
           </Button>
         </Box>
       )}
-
       {/* Nút xem thêm */}
       {filteredProducts.length > 0 && (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
