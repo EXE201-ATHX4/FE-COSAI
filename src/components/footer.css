@@ -258,3 +258,12 @@
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.4;
 }
+
+/* Additional Footer Styling */
+.footer {
+  background-color: #f8f9fa;
+  padding: 16px;
+  text-align: center;
+  color: #333;
+  font-size: 14px;
+}
