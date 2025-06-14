@@ -1,0 +1,753 @@
+/* General Styling */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f7f8fc; /* Softer, slightly off-white background */
+  overflow-y: auto; /* Allow scrolling for body if content exceeds viewport */
+}
+
+/* Page Container - Optimized for Single Screen */
+.cart-page-container {
+  display: flex;
+  max-width: 1200px; /* Slightly narrower for a more compact feel */
+  margin: 20px auto; /* Reduced margin for top/bottom */
+  padding: 15px; /* Reduced padding */
+  gap: 25px; /* Slightly reduced space between columns */
+  align-items: stretch; /* Makes flex items stretch to fill the height of the container, matching heights */
+  box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+@media (max-width: 1024px) {
+  .cart-page-container {
+    flex-direction: column;
+    padding: 10px; /* Further reduced padding */
+    gap: 15px; /* Reduced gap for smaller screens */
+    margin: 10px auto; /* Adjust margin for smaller screens */
+    min-height: auto; /* Remove fixed height on smaller screens for better responsiveness */
+  }
+}
+
+/* Left Column - Cart Items */
+.cart-left-column {
+    width: 90%; /* Full width on smaller screens */
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Reduced gap */
+  flex-grow: 1; /* Allow left column to grow vertically */
+}
+
+/* Right Column - Contact Info & Order Details */
+.cart-right-column {
+    width: 50%; /* Full width on smaller screens */
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Reduced gap */
+  flex-grow: 1; /* Allow right column to grow vertically */
+}
+
+/* Cart Header */
+.cart-header {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.cart-title {
+  background: #329066; /* Darker green */
+  color: white;
+  padding: 8px 18px; /* Further reduced padding */
+  border-radius: 18px; /* Slightly smaller border radius */
+  display: inline-block;
+  font-size: 16px; /* Slightly smaller font size */
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+/* Table Structure */
+.cart-table {
+  background: white;
+  border-radius: 8px; /* Consistent smaller border radius */
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06); /* Lighter, softer shadow */
+  border: 1px solid #e5e5e5; /* Very light border */
+  flex-grow: 1; /* Allow table to grow within left column */
+  display: flex; /* Make table a flex container */
+  flex-direction: column; /* Stack header and items vertically */
+}
+
+.table-header {
+  background: #329066; /* Keep the existing green for table header */
+  color: white;
+  display: grid;
+  grid-template-columns: 2.2fr 0.8fr 1fr 1fr 1.2fr; /* Adjusted column widths */
+  padding: 12px; /* Reduced padding */
+  font-weight: 600;
+  font-size: 12.5px; /* Smaller font size */
+  flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.table-header > div {
+  text-align: center;
+  padding: 0 6px; /* Reduced padding */
+}
+
+.col-product {
+  text-align: left !important;
+}
+.cart-items-wrapper {
+  max-height: 650px; /* Re-added max-height to enable internal scrolling for product list */
+  overflow-y: auto; /* Enable vertical scrolling for the items list itself */
+  padding-right: 5px; /* Space for scrollbar */
+  flex-grow: 1; /* Allow items wrapper to fill available space within the table */
+}
+
+/* Custom Scrollbar for Webkit browsers (Chrome, Safari) */
+.cart-items-wrapper::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.cart-items-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the scrollbar track */
+  border-radius: 10px;
+}
+
+.cart-items-wrapper::-webkit-scrollbar-thumb {
+  background: #c0c0c0; /* Color of the scrollbar thumb */
+  border-radius: 10px;
+}
+
+.cart-items-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0; /* Color of the scrollbar thumb on hover */
+}
+
+
+
+.empty-cart-message {
+  text-align: center;
+  padding: 30px 20px; /* Reduced padding */
+  font-size: 16px; /* Slightly smaller font */
+  color: #888;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 2.2fr 0.8fr 1fr 1fr 1.2fr; /* Matched table header columns */
+  padding: 14px 12px; /* Increased vertical padding for taller item rows */
+  border-bottom: 1px solid #f5f5f5; /* Very light border */
+  align-items: center;
+  transition: background-color 0.15s ease;
+}
+
+.cart-item:hover {
+  background-color: #fdfdfd; /* Very subtle hover effect */
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+/* Product Info */
+.product-info {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Slightly increased gap */
+}
+
+.item-checkbox {
+  width: 16px; /* Slightly smaller */
+  height: 16px; /* Slightly smaller */
+  cursor: pointer;
+  accent-color: #f8f8f8; /* Changed to a lighter color for the checkbox tint */
+}
+
+.product-image {
+  position: relative;
+  width: 95px; /* Further increased image size */
+  height: 95px; /* Further increased image size */
+  border-radius: 5px; /* Smaller border radius */
+  overflow: hidden;
+  border: 1px solid #eee; /* Lighter border */
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.new-badge {
+  position: absolute;
+  top: -2px; /* Adjusted position */
+  right: -2px; /* Adjusted position */
+  background: #e53935; /* Vibrant red */
+  color: white;
+  font-size: 8px; /* Smaller font size */
+  padding: 1px 4px; /* Smaller padding */
+  border-radius: 6px; /* Smaller border radius */
+  font-weight: bold;
+  z-index: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.product-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Slightly increased gap */
+  flex-grow: 1; /* Allow details to take available space */
+}
+
+.brand-logo {
+  width: 25px; /* Slightly larger logo */
+  height: 25px; /* Slightly larger logo */
+}
+
+.brand-logo img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.product-name {
+  font-size: 13.5px; /* Slightly larger font size */
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  line-height: 1.25;
+}
+
+/* Unit, Price, Total columns */
+.col-unit,
+.col-price,
+.col-total {
+  text-align: center;
+  padding: 0 6px; /* Reduced padding */
+}
+
+.unit-text,
+.price-text {
+  font-size: 13.5px; /* Consistent font size */
+  color: #666;
+}
+
+.total-price {
+  font-size: 15px; /* Slightly larger */
+  font-weight: 600;
+  color: #329066; /* Green for total */
+}
+
+/* Quantity Controls */
+.col-quantity {
+  display: flex;
+  justify-content: center;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e0e0e0; /* Lighter border */
+  border-radius: 4px; /* Smaller border radius */
+  overflow: hidden;
+}
+
+.quantity-btn {
+  width: 28px; /* Slightly larger button */
+  height: 28px; /* Slightly larger button */
+  border: none;
+  background: #fcfcfc; /* Lighter background */
+  cursor: pointer;
+  font-size: 15px; /* Slightly larger font size */
+  font-weight: 600;
+  color: #666;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quantity-btn:hover:not(:disabled) {
+  background: #329066;
+  color: white;
+}
+
+.quantity-btn:disabled {
+  opacity: 0.5; /* Slightly more opaque when disabled */
+  cursor: not-allowed;
+}
+
+.quantity-btn.minus {
+  border-right: 1px solid #eee; /* Lighter border */
+}
+
+.quantity-btn.plus {
+  border-left: 1px solid #eee; /* Lighter border */
+}
+
+.quantity {
+  width: 35px; /* Slightly larger width */
+  text-align: center;
+  font-size: 13.5px; /* Consistent font size */
+  font-weight: 600;
+  background: white;
+  padding: 5px 0; /* Adjusted padding */
+  color: #333;
+}
+
+/* Remove Button */
+.remove-btn {
+  background: none;
+  border: none;
+  font-size: 15px; /* Slightly larger */
+  cursor: pointer;
+  padding: 3px;
+  margin-left: 6px;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+  color: #888; /* Softer icon color */
+}
+
+.remove-btn:hover {
+  background: #ffeeee; /* Lighter hover background */
+  color: #e53935; /* Red on hover */
+  transform: scale(1.05);
+}
+
+/* Footer (for cart items section) */
+.cart-footer {
+  background: #ffffff; /* White background */
+  color: #333;
+  padding: 12px 15px; /* Reduced padding */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px; /* Matched border radius with table */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06); /* Consistent shadow */
+  border: 1px solid #e5e5e5; /* Consistent border */
+  flex-shrink: 0; /* Prevent footer from shrinking */
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Reduced gap */
+}
+
+.select-all {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Reduced gap */
+  cursor: pointer;
+  font-size: 13.5px; /* Consistent font size */
+}
+
+.select-all input {
+  width: 14px; /* Slightly smaller */
+  height: 14px; /* Slightly smaller */
+  accent-color: #329066;
+}
+
+.delete-selected {
+  background: #f0f0f0;
+  color: #666;
+  border: 1px solid #ddd;
+  padding: 6px 12px; /* Adjusted padding */
+  border-radius: 4px; /* Smaller border radius */
+  cursor: pointer;
+  font-size: 13.5px; /* Consistent font size */
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.delete-selected:hover {
+  background: #e5e5e5;
+  color: #333;
+}
+
+.footer-right {
+  text-align: right;
+}
+
+.total-summary {
+  font-size: 13.5px; /* Consistent font size */
+  color: #333;
+}
+
+.total-amount {
+  font-size: 16.5px; /* Slightly larger */
+  font-weight: 700;
+  color: #e53935; /* Consistent red for total */
+  margin-left: 6px;
+}
+
+/* Action Buttons for left column */
+.cart-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 5px; /* Slightly reduced margin */
+  flex-shrink: 0; /* Prevent actions from shrinking */
+}
+
+.back-btn {
+  background: none;
+  border: 1px solid #ccc;
+  color: #777;
+  padding: 9px 16px; /* Adjusted padding */
+  border-radius: 4px; /* Smaller border radius */
+  cursor: pointer;
+  font-size: 13.5px; /* Consistent font size */
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Reduced gap */
+}
+
+.back-btn:hover {
+  background: #f0f8ff;
+  border-color: #329066;
+  color: #329066;
+}
+
+/* Right Column Sections */
+.contact-info-section,
+.order-details-section {
+  background: white;
+  border-radius: 8px; /* Consistent border radius */
+  padding: 18px; /* Reduced padding */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06); /* Consistent shadow */
+  border: 1px solid #e5e5e5; /* Consistent border */
+}
+
+.contact-info-section h3,
+.order-details-section h3 {
+  color: #329066; /* Darker green for headings */
+  font-size: 16px; /* Consistent heading size */
+  margin-top: 0;
+  margin-bottom: 15px; /* Slightly reduced margin */
+  border-bottom: 1px solid #f0f0f0; /* Lighter border */
+  padding-bottom: 8px; /* Reduced padding */
+}
+
+/* Form Styling */
+.form-group-save-default {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Reduced margin */
+}
+
+.form-group-save-default input {
+  width: 14px; /* Consistent size */
+  height: 14px; /* Consistent size */
+  accent-color: #329066;
+  margin-right: 6px; /* Reduced margin */
+}
+
+.form-group-save-default label {
+  font-size: 13.5px; /* Consistent font size */
+  color: #555;
+  cursor: pointer;
+}
+
+.form-group-inline {
+  display: flex;
+  gap: 12px; /* Reduced gap */
+  margin-bottom: 10px; /* Reduced margin */
+}
+
+.form-group-inline .input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group-full-width {
+  margin-bottom: 10px; /* Reduced margin */
+}
+
+.input-group label,
+.form-group-full-width label {
+  font-size: 11.5px; /* Slightly smaller label font */
+  color: #777;
+  margin-bottom: 3px; /* Reduced margin */
+  display: block;
+}
+
+.input-group input,
+.input-group select,
+.form-group-full-width input {
+  width: 100%;
+  padding: 8px 9px; /* Reduced padding for compactness */
+  border: 1px solid #ddd;
+  border-radius: 3px; /* Slightly smaller border radius */
+  font-size: 13.5px; /* Consistent font size */
+  box-sizing: border-box;
+  color: #333; /* Ensure input text color is visible */
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.form-group-full-width input:focus {
+  outline: none;
+  border-color: #f2fdf3; /* Light green border on focus */
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.15); /* Softer shadow */
+}
+
+/* Order Details Section */
+.discount-input {
+    color: #333;
+  display: flex;
+  margin-bottom: 12px; /* Reduced margin */
+}
+
+.discount-input input {
+  flex: 1;
+  padding: 8px 9px; /* Consistent padding */
+  border: 1px solid #ddd;
+  border-right: none;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  font-size: 13.5px; /* Consistent font size */
+}
+
+.discount-input button {
+  background: #f0f0f0;
+  color: #666;
+  border: none;
+  padding: 8px 11px; /* Adjusted padding */
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12.5px; /* Smaller font size */
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.discount-input button:hover {
+  background: #e5e5e5;
+  color: #333;
+}
+
+.note-input input {
+    color: #333;
+  width: 100%;
+  padding: 8px 9px; /* Consistent padding */
+  border: 1px solid #ddd;
+  border-radius: 3px; /* Consistent border radius */
+  font-size: 13.5px; /* Consistent font size */
+  margin-bottom: 15px; /* Slightly reduced margin */
+  box-sizing: border-box;
+}
+
+.order-summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0; /* Reduced vertical padding */
+  font-size: 13.5px; /* Consistent font size */
+  color: #333;
+}
+
+.order-summary-row:not(.total-row) {
+  border-bottom: 1px dashed #f5f5f5; /* Lighter dashed line */
+}
+
+.total-row {
+  font-size: 16px; /* Consistent size for total row */
+  font-weight: 700;
+  color: #329066; /* Darker green for total section text */
+  padding-top: 12px;
+  border-top: 1px solid #e0e0e0; /* Lighter border */
+  margin-top: 8px;
+}
+
+.total-row span:last-child {
+  color: #e53935; /* Consistent red for total amount */
+}
+
+.note-text {
+  font-size: 11px; /* Slightly smaller font size */
+  color: #888;
+  text-align: center;
+  margin-top: 15px; /* Slightly reduced margin */
+  line-height: 1.3;
+}
+
+.checkout-btn-right {
+  background: #329066;
+  color: white;
+  border: none;
+  padding: 12px 25px; /* Reduced padding */
+  border-radius: 20px; /* Slightly smaller border radius */
+  font-size: 14.5px; /* Slightly smaller font size */
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 10px rgba(76, 175, 80, 0.25); /* Softer shadow */
+  width: 100%;
+  margin-top: 18px; /* Slightly reduced margin */
+}
+
+.checkout-btn-right:hover {
+  background: #329066;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(76, 175, 80, 0.35);
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+  .cart-page-container {
+    padding: 8px; /* Even less padding on small screens */
+    margin: 8px auto;
+    min-height: auto; /* Remove fixed height on smaller screens */
+  }
+
+  .table-header {
+    display: none; /* Hide table header on small screens */
+  }
+
+  .cart-items-wrapper {
+    max-height: none; /* Allow full height on mobile if needed */
+    overflow-y: au;
+    padding-right: 0;
+  }
+
+  .cart-item {
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    padding: 12px; /* Consistent padding */
+    border: 1px solid #e0e0e0;
+    border-radius: 6px; /* Slightly smaller border radius */
+    margin-bottom: 8px; /* Reduced margin */
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  .product-info {
+    width: 100%;
+    justify-content: flex-start;
+    margin-bottom: 6px; /* Reduced margin */
+  }
+
+  .product-image {
+    width: 60px; /* Adjusted smaller image size for mobile */
+    height: 60px; /* Adjusted smaller image size for mobile */
+  }
+
+  .product-name {
+    font-size: 12.5px; /* Smaller font size on mobile */
+  }
+
+  .col-unit,
+  .col-price,
+  .col-quantity,
+  .col-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0; /* Reduced padding */
+    border-top: 1px solid #f8f8f8; /* Lighter border */
+    width: 100%;
+    font-size: 13px; /* Consistent font size */
+  }
+
+  .col-unit::before { content: "Đơn vị tính: "; font-weight: 600; color: #555; }
+  .col-price::before { content: "Đơn giá: "; font-weight: 600; color: #555; }
+  .col-quantity::before { content: "Số lượng: "; font-weight: 600; color: #555; }
+  .col-total::before { content: "Số tiền: "; font-weight: 600; color: #555; }
+
+  .quantity-controls {
+    flex-grow: 1; /* Allow controls to fill space */
+    justify-content: flex-end; /* Push to right */
+  }
+
+  .quantity {
+    width: 25px; /* Further reduced width */
+  }
+
+  .remove-btn {
+    margin-left: auto; /* Push remove button to the right */
+  }
+
+  .cart-footer {
+    flex-direction: column;
+    gap: 8px; /* Reduced gap */
+    padding: 10px 12px;
+  }
+
+  .footer-left {
+    flex-direction: column;
+    gap: 8px; /* Reduced gap */
+  }
+
+  .select-all, .delete-selected {
+    font-size: 12.5px;
+  }
+
+  .total-summary {
+    font-size: 12.5px;
+  }
+
+  .total-amount {
+    font-size: 15px;
+  }
+
+  .cart-actions {
+    flex-direction: column;
+    gap: 8px; /* Reduced gap */
+  }
+
+  .back-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 12.5px;
+    padding: 8px 15px;
+  }
+
+  .contact-info-section,
+  .order-details-section {
+    padding: 15px; /* Reduced padding */
+  }
+
+  .contact-info-section h3,
+  .order-details-section h3 {
+    font-size: 15px;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+  }
+
+  .input-group label,
+  .form-group-full-width label {
+    font-size: 11px;
+  }
+
+  .input-group input,
+  .input-group select,
+  .form-group-full-width input {
+    font-size: 12.5px;
+    padding: 7px 8px;
+  }
+
+  .discount-input input,
+  .discount-input button,
+  .note-input input {
+    font-size: 12.5px;
+    padding: 7px 8px;
+  }
+
+  .order-summary-row {
+    font-size: 13px;
+  }
+
+  .total-row {
+    font-size: 15px;
+  }
+
+  .note-text {
+    font-size: 10.5px;
+  }
+
+  .checkout-btn-right {
+    padding: 10px 20px;
+    font-size: 13.5px;
+    margin-top: 15px;
+  }
+}

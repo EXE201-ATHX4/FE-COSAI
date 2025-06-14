@@ -89,10 +89,10 @@ export const Header = () => {
             </Button>
             <Button
               // Thêm điều hướng cho SẢN PHẨM nếu có route
-              onClick={() => navigation("/products")}
-              color="inherit"
-              sx={{
-                fontSize: "1rem",
+              onClick={() => navigation('/products')}
+              color="inherit" 
+              sx={{ 
+                fontSize: '1rem',
                 fontWeight: 500,
                 textTransform: "none",
                 padding: "8px 16px",
@@ -161,6 +161,7 @@ export const Header = () => {
                 },
                 transition: "all 0.3s ease",
               }}
+              onClick={() => navigation('/cart')}
             >
               <Badge badgeContent={3} color="error">
                 <ShoppingCartIcon />
