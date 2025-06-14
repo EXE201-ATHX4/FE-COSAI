@@ -1,5 +1,6 @@
 import React from "react";
 import "./footer.css"; // Import the new CSS file
+import logo from "../assets/logo_no_bg.svg";
 
 export const Footer = () => {
   return (
@@ -10,7 +11,7 @@ export const Footer = () => {
           <div className="footer-section">
             <div className="footer-logo-wrapper">
               <img
-                src="/src/assets/logo_no_bg.svg"
+                src={logo}
                 alt="Logo"
                 className="footer-logo-img"
               />
@@ -94,7 +95,7 @@ export const Footer = () => {
               <div className="social-header">
                 <div className="social-logo-wrapper">
                   <img
-                    src="/src/assets/logo_no_bg.svg"
+                    src={logo}
                     alt="Logo"
                     className="social-logo-img"
                   />

@@ -30,6 +30,13 @@ import { Footer } from "../../components/footer";
 import { Header } from "../../components/header";
 import { Diamond, Droplets, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
+import ellipse95 from "../../assets/Ellipse_95.png";
+import placeholder from "../../assets/placeholder.png";
+import placeholder2 from "../../assets/placeholder_2.png";
+import placeholder3 from "../../assets/placeholder_3.png";
+import imgHome1 from "../../assets/IMG_Home_1.png";
+import imgHome2 from "../../assets/IMG_Home_2.png";
+import cocoonImg from "../../assets/cocoon.png";
 
 // Trang chủ mẫu
 export default function Home() {
@@ -339,7 +346,7 @@ const CombinedBeautyLayout = () => {
                       border: "3px solid #FFFFFF",
                       objectFit: "cover",
                     }}
-                    image="/src/assets/Ellipse_95.png"
+                    image={ellipse95}
                     alt="AI Avatar"
                   />{" "}
                 </Box>
@@ -497,7 +504,7 @@ const CombinedBeautyLayout = () => {
               }}
             >
               <img
-                src="/src/assets/placeholder.png"
+                src={placeholder}
                 alt="Beauty Treatment Left"
                 style={{
                   width: "100%",
@@ -591,7 +598,7 @@ const CombinedBeautyLayout = () => {
               }}
             >
               <img
-                src="/src/assets/placeholder_2.png"
+                src={placeholder2}
                 alt="Beauty Treatment Right"
                 style={{
                   width: "100%",
@@ -632,7 +639,7 @@ const CombinedBeautyLayout = () => {
         }}
       >
         <img
-          src="/src/assets/IMG_Home_1.png"
+          src={imgHome1}
           alt="Beauty Products"
           style={{
             width: "100%",
@@ -687,7 +694,7 @@ const CombinedBeautyLayout = () => {
                   objectFit: "cover",
                   borderRadius: "20px",
                 }}
-                image="/src/assets/IMG_Home_2.png"
+                image={imgHome2}
                 alt="Beauty Portrait"
               />
 
@@ -957,7 +964,7 @@ const CombinedBeautyLayout = () => {
               }}
             >
               <img
-                src="/src/assets/cocoon.png"
+                src={cocoonImg}
                 alt="Natural Skincare Product"
                 style={{
                   width: "450px",
@@ -1371,7 +1378,7 @@ const CombinedBeautyLayout = () => {
                     height: "100%",
                     objectFit: "cover",
                   }}
-                  image="/src/assets/placeholder_3.png"
+                  image={placeholder3}
                   alt="Testimonial Image"
                 />
                 {/* Decorative green circle */}
