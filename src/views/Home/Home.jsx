@@ -26,8 +26,8 @@ import {
   NavigateNext,
   ArrowForward,
 } from "@mui/icons-material";
-import { Footer } from "../components/footer";
-import { Header } from "../components/header";
+import { Footer } from "../../components/footer";
+import { Header } from "../../components/header";
 import { Diamond, Droplets, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 

@@ -1,8 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Home from '../views/Home/Home';
 import { Cosai } from '../views/Cosai/Cosai';
-import CartPage from '../views/Cart/Cart';
-import PaymentPage from '../views/Payment/Payment';
 
 
 const AnimatedRoutes = () => {
@@ -14,10 +12,6 @@ const AnimatedRoutes = () => {
       <Route path="/home" element={<Home />} />
       
       <Route path="/cosai" element={<Cosai />} />
-      <Route path="/cart" element={<CartPage />} />
-      <Route path="/cart/payment" element={<PaymentPage/>} />
-
-      
       
     </Routes>
   );
