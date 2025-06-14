@@ -751,3 +751,14 @@ body {
     margin-top: 15px;
   }
 }
+.checkout-btn-right:disabled {
+  background-color: #cccccc; /* Màu xám */
+  color: #666666; /* Màu chữ hơi tối để dễ đọc */
+  cursor: not-allowed; /* Biểu tượng con trỏ cấm */
+  opacity: 0.7; /* Làm mờ nút một chút */
+}
+
+.checkout-btn-right:disabled:hover {
+  background-color: #cccccc; /* Giữ nguyên màu khi hover nếu disabled */
+  cursor: not-allowed;
+}
