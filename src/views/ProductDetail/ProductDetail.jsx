@@ -135,7 +135,7 @@ function ProductDetailPage() {
                   precision={0.5}
                   sx={{ color: "#0a5c36" }}
                 />
-                <Typography variant="body2" sx={{ ml: 1 }}>
+                <Typography variant="body2" sx={{ ml: 1, color: "#213547" }}>
                   {product.reviewCount} Đánh giá
                 </Typography>
               </Box>
@@ -180,14 +180,17 @@ function ProductDetailPage() {
                 )}
               </Box>
 
-              <Typography variant="body1" sx={{ mb: 2, fontWeight: "medium" }}>
+              <Typography
+                variant="body1"
+                sx={{ mb: 2, fontWeight: "medium", color: "#213547" }}
+              >
                 Dung tích: {product.volume}
               </Typography>
 
               <Divider sx={{ mb: 3 }} />
 
               <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
-                <Typography variant="body1" sx={{ mr: 2 }}>
+                <Typography variant="body1" sx={{ mr: 2, color: "#213547" }}>
                   Số lượng:
                 </Typography>
                 <Box
@@ -275,7 +278,7 @@ function ProductDetailPage() {
               <Box sx={{ mb: 3, display: "flex", alignItems: "center" }}>
                 <Typography
                   variant="subtitle1"
-                  sx={{ fontWeight: "bold", mr: 2 }}
+                  sx={{ fontWeight: "bold", mr: 2, color: "#213547" }}
                 >
                   Share:
                 </Typography>
@@ -304,7 +307,7 @@ function ProductDetailPage() {
                 >
                   Chính sách đổi trả Hàng
                 </Typography>
-                <Typography variant="body2">
+                <Typography variant="body2" sx={{ color: "#213547" }}>
                   Chính sách đổi trả: Quý khách có thể đổi trả hàng trong vòng 7
                   ngày kể từ ngày nhận hàng nếu sản phẩm lỗi do nhà sản xuất.
                   Chúng tôi sẽ hỗ trợ đổi sản phẩm hoặc hoàn tiền cho khách
@@ -430,7 +433,7 @@ function ProductDetailPage() {
                       <ListItemIcon sx={{ minWidth: 24 }}>
                         <CircleIcon sx={{ color: "#0a5c36", fontSize: 8 }} />
                       </ListItemIcon>
-                      <ListItemText primary={item} />
+                      <ListItemText primary={item} sx={{ color: "#213547" }} />
                     </ListItem>
                   ))}
                 </List>
@@ -464,7 +467,7 @@ function ProductDetailPage() {
                       >
                         {ingredient.name}
                       </Typography>
-                      <Typography variant="body1">
+                      <Typography variant="body1" sx={{ color: "#213547" }}>
                         {ingredient.description}
                       </Typography>
                     </Box>
@@ -508,7 +511,7 @@ function ProductDetailPage() {
                     >
                       Lượng dùng
                     </Typography>
-                    <Typography variant="body1">
+                    <Typography variant="body1" sx={{ color: "#213547" }}>
                       {product.usageDetails.amount}
                     </Typography>
                   </Box>
@@ -520,7 +523,7 @@ function ProductDetailPage() {
                     >
                       Mùi hương
                     </Typography>
-                    <Typography variant="body1">
+                    <Typography variant="body1" sx={{ color: "#213547" }}>
                       {product.usageDetails.scent}
                     </Typography>
                   </Box>
@@ -532,7 +535,7 @@ function ProductDetailPage() {
                     >
                       Lưu ý
                     </Typography>
-                    <Typography variant="body1">
+                    <Typography variant="body1" sx={{ color: "#213547" }}>
                       {product.usageDetails.note}
                     </Typography>
                   </Box>

@@ -121,10 +121,13 @@ function CustomerReviews({ productId }) {
                   alt={review.name}
                 />
                 <Box sx={{ flex: 1 }}>
-                  <Typography variant="h6" sx={{ fontWeight: "bold", mb: 0.5 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: "bold", mb: 0.5, color: "#213547" }}
+                  >
                     {review.name}
                   </Typography>
-                  <Typography variant="body1" sx={{ mb: 1 }}>
+                  <Typography variant="body1" sx={{ mb: 1, color: "#213547" }}>
                     {review.comment}
                   </Typography>
                   <Box
@@ -199,11 +202,13 @@ function CustomerReviews({ productId }) {
                   value="male"
                   control={<Radio size="small" />}
                   label="Anh"
+                  sx={{ color: "#213547" }}
                 />
                 <FormControlLabel
                   value="female"
                   control={<Radio size="small" />}
                   label="Chị"
+                  sx={{ color: "#213547" }}
                 />
               </RadioGroup>
               <TextField
@@ -225,7 +230,7 @@ function CustomerReviews({ productId }) {
                 mt: { xs: 2, sm: 0 },
               }}
             >
-              <Typography variant="body2" sx={{ mr: 1 }}>
+              <Typography variant="body2" sx={{ mr: 1, color: "#213547" }}>
                 Đánh giá
               </Typography>
               <Box sx={{ display: "flex" }}>

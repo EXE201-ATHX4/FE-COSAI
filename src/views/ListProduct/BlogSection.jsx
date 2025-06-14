@@ -67,7 +67,7 @@ function BlogSection() {
       <Box sx={{ px: { xs: 2, sm: 4, md: 10, lg: "200px" } }}>
         <Grid container spacing={4}>
           {blogPosts.map((post, index) => (
-            <Grid item xs={12} key={post.id} sx={{ mb: 2 }}>
+            <Grid item size={{ xs: 12 }} key={post.id} sx={{ mb: 2 }}>
               <Box
                 sx={{
                   display: "flex",
@@ -97,7 +97,11 @@ function BlogSection() {
                   >
                     {post.title}
                   </Typography>
-                  <Typography variant="body1" paragraph>
+                  <Typography
+                    variant="body1"
+                    paragraph
+                    sx={{ color: "#213547" }}
+                  >
                     {post.content}
                   </Typography>
                   <Button
