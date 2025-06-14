@@ -18,6 +18,7 @@ import {
 } from "@mui/icons-material";
 import SearchBar from "./SearchBar"; // Assuming SearchBar component exists
 import { useNavigate } from "react-router-dom"; // For navigation
+import logoWhite from "../assets/logo_no_bg_w.svg";
 
 export const Header = () => {
   // State for search query (if SearchBar uses it internally)
@@ -113,7 +114,7 @@ export const Header = () => {
           {/* Logo Section */}
           <Box sx={{ display: "flex", alignItems: "center", marginRight: 4 }}>
             <img
-              src="/src/assets/logo_no_bg_w.svg" // Path to your logo image
+              src={logoWhite} // Đã chuyển sang import
               alt="Logo"
               style={{
                 marginRight: 8,
