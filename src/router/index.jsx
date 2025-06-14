@@ -11,6 +11,8 @@ import CartPage from '../views/Cart/Cart';
 import PaymentPage from '../views/Payment/Payment';
 import Product from "../views/ListProduct/Product";
 import ProductDetailPage from "../views/ProductDetail/ProductDetail";
+import LoginPage from "../views/Auth/Login";
+import RegisterPage from "../views/Auth/Register";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -19,6 +21,11 @@ const AnimatedRoutes = () => {
     <Routes location={location} key={location.pathname}>
       <Route path="/" element={<Navigate to="/home" replace />} />
       <Route path="/home" element={<Home />} />
+
+      <Route path="/login" element={<LoginPage/>} />
+      <Route path="/register" element={<RegisterPage/>} />
+      
+      {/* Redirect /cosai to /home */}
 
       <Route path="/cosai" element={<Cosai />} />
       <Route path="/products" element={<Product />} />

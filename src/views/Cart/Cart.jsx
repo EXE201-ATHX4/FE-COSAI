@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const Cart = () => {
-  // Initial cart items data
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([
     {
@@ -106,6 +105,9 @@ const Cart = () => {
   // Calculate shipping fee conditionally
   const [shippingFee, setShippingFee] = useState(0);
 
+  // --- New state for button disabled status ---
+  const [isCheckoutDisabled, setIsCheckoutDisabled] = useState(true);
+
   // Effect to sync 'selectAll' checkbox with individual item selections
   useEffect(() => {
     setSelectAll(cartItems.every((item) => item.selected));
@@ -204,6 +206,21 @@ const Cart = () => {
     }
   }, [shippingInfo, selectedItems.length]); // Dependencies: shippingInfo and number of selected items
 
+  // --- New useEffect to manage checkout button disabled state ---
+  useEffect(() => {
+    const areAllFieldsFilled =
+      shippingInfo.fullName.trim() !== "" &&
+      shippingInfo.phone.trim() !== "" &&
+      shippingInfo.email.trim() !== "" &&
+      shippingInfo.address.trim() !== "" &&
+      shippingInfo.province !== "" &&
+      shippingInfo.district !== "" &&
+      shippingInfo.ward !== "";
+
+    // The button is enabled only if there are selected items AND all required fields are filled
+    setIsCheckoutDisabled(!(selectedItems.length > 0 && areAllFieldsFilled));
+  }, [shippingInfo, selectedItems.length]); // Re-run when shippingInfo or selected items change
+
   const updateQuantity = (id, change) => {
     setCartItems((prevItems) =>
       prevItems.map((item) => {
@@ -276,7 +293,6 @@ const Cart = () => {
 
   return (
     <>
-      {/* Assuming Header component provides navigation or branding */}
       <Header />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -443,6 +459,7 @@ const Cart = () => {
                     placeholder="Họ và tên"
                     value={shippingInfo.fullName}
                     onChange={handleShippingInfoChange}
+                    required // Added required attribute
                   />
                 </div>
                 <div className="input-group">
@@ -454,6 +471,7 @@ const Cart = () => {
                     placeholder="Số điện thoại"
                     value={shippingInfo.phone}
                     onChange={handleShippingInfoChange}
+                    required // Added required attribute
                   />
                 </div>
               </div>
@@ -467,6 +485,7 @@ const Cart = () => {
                     placeholder="Email nhận hóa đơn"
                     value={shippingInfo.email}
                     onChange={handleShippingInfoChange}
+                    required // Added required attribute
                   />
                 </div>
                 <div className="input-group">
@@ -476,6 +495,7 @@ const Cart = () => {
                     name="province"
                     value={shippingInfo.province}
                     onChange={handleShippingInfoChange}
+                    required // Added required attribute
                   >
                     <option value="">Chọn Tỉnh/Thành Phố</option>
                     {provinces.map((province) => (
@@ -494,8 +514,8 @@ const Cart = () => {
                     name="district"
                     value={shippingInfo.district}
                     onChange={handleShippingInfoChange}
-                    // Disable if no province selected or no districts available
                     disabled={!shippingInfo.province || districts.length === 0}
+                    required // Added required attribute
                   >
                     <option value="">Chọn Quận/Huyện</option>
                     {districts.map((district) => (
@@ -512,8 +532,8 @@ const Cart = () => {
                     name="ward"
                     value={shippingInfo.ward}
                     onChange={handleShippingInfoChange}
-                    // Disable if no district selected or no wards available
                     disabled={!shippingInfo.district || wards.length === 0}
+                    required // Added required attribute
                   >
                     <option value="">Chọn Phường/Xã</option>
                     {wards.map((ward) => (
@@ -533,6 +553,7 @@ const Cart = () => {
                   placeholder="Số nhà, tên đường, tên tòa nhà..."
                   value={shippingInfo.address}
                   onChange={handleShippingInfoChange}
+                  required // Added required attribute
                 />
               </div>
             </div>
@@ -568,23 +589,22 @@ const Cart = () => {
                 <span>Tổng tiền:</span>
                 <span>{formatPrice(finalTotal)}</span>
               </div>
-              <p className="note-text">
-                *Với mỗi đơn hàng, bạn đã đọc và đồng ý với các điều khoản dịch
-                vụ và bảo mật của The Cocoon.
-              </p>
-              <button onClick={() => navigate("/cart/payment")} className="checkout-btn-right">ĐẶT HÀNG</button>
-              
+              <button
+                onClick={() => navigate("/cart/payment")}
+                className="checkout-btn-right"
+                disabled={isCheckoutDisabled} // Apply the disabled state here
+              >
+                ĐẶT HÀNG
+              </button>
             </div>
           </div>
         </div>
       </motion.div>
-      {/* Assuming Footer component provides additional links or copyright info */}
       <Footer />
     </>
   );
 };
 
-// Default export for the CartPage component
 export default function CartPage() {
   return <Cart />;
 }
