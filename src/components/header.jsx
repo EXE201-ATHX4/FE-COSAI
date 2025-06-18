@@ -97,7 +97,7 @@ export const Header = () => {
   // Handler for clicking on the user's name/profile in the menu
   const handleProfileClick = () => {
     handleAccountMenuClose(); // Close the menu
-    navigate("/profile"); // Navigate to a user profile page (optional route)
+    navigate("/account"); // Navigate to a user profile page (optional route)
   };
 
   return (
@@ -146,10 +146,10 @@ export const Header = () => {
               TRANG CHỦ
             </Button>
             <Button
-              onClick={() => navigate('/products')} // Navigate to products page
+              onClick={() => navigate("/products")} // Navigate to products page
               color="inherit"
               sx={{
-                fontSize: '1rem',
+                fontSize: "1rem",
                 fontWeight: 500,
                 textTransform: "none",
                 padding: "8px 16px",
@@ -207,9 +207,9 @@ export const Header = () => {
               }}
               onClick={handleAccountMenuClick} // Click handler to open menu or navigate to login
               // Accessibility attributes for the menu
-              aria-controls={openAccountMenu ? 'account-menu' : undefined}
+              aria-controls={openAccountMenu ? "account-menu" : undefined}
               aria-haspopup="true"
-              aria-expanded={openAccountMenu ? 'true' : undefined}
+              aria-expanded={openAccountMenu ? "true" : undefined}
             >
               {/* Display user name if logged in, otherwise "Tài khoản" */}
               {isLoggedIn ? userName : "Tài khoản"}
@@ -222,21 +222,21 @@ export const Header = () => {
               open={openAccountMenu} // Controls whether the menu is open or closed
               onClose={handleAccountMenuClose} // Function to call when the menu needs to close
               MenuListProps={{
-                'aria-labelledby': 'account-button', // Links menu to the button for accessibility
+                "aria-labelledby": "account-button", // Links menu to the button for accessibility
               }}
               // Positioning of the menu relative to the anchor
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
+                vertical: "bottom",
+                horizontal: "right",
               }}
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
             >
               {/* Menu Item displaying user name (optional: make clickable for profile) */}
               <MenuItem onClick={handleProfileClick}>
-                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                <Typography variant="body1" sx={{ fontWeight: "bold" }}>
                   {userName}
                 </Typography>
               </MenuItem>
@@ -256,9 +256,11 @@ export const Header = () => {
                 },
                 transition: "all 0.3s ease", // Smooth hover transitions
               }}
-              onClick={() => navigate('/cart')} // Navigate to cart page
+              onClick={() => navigate("/cart")} // Navigate to cart page
             >
-              <Badge badgeContent={3} color="error"> {/* Example badge content */}
+              <Badge badgeContent={3} color="error">
+                {" "}
+                {/* Example badge content */}
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>

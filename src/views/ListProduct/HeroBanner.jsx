@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Box, Button } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import banner from "../../assets/banner.png";
+import banner2 from "../../assets/banner2.png";
+import banner3 from "../../assets/banner3.png";
 
 function HeroBanner() {
   const [currentBanner, setCurrentBanner] = useState(0);
