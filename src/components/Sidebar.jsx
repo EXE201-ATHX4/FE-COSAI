@@ -24,8 +24,8 @@ const Sidebar = ({ activeItem, onItemClick }) => {
   const menuItems = [
     { id: "account", label: "Thông tin tài khoản", icon: <PersonIcon /> },
     { id: "orders", label: "Đơn hàng của tôi", icon: <ShippingIcon /> },
-    { id: "favorites", label: "Sản phẩm yêu thích", icon: <FavoriteIcon /> },
-    { id: "address", label: "Địa chỉ giao hàng", icon: <LocationIcon /> },
+    // { id: "favorites", label: "Sản phẩm yêu thích", icon: <FavoriteIcon /> },
+    // { id: "address", label: "Địa chỉ giao hàng", icon: <LocationIcon /> },
     { id: "points", label: "Điểm tích lũy", icon: <StarsIcon /> },
     { id: "settings", label: "Cài đặt tài khoản", icon: <SettingsIcon /> },
     { id: "logout", label: "Đăng xuất", icon: <ExitIcon />, color: "error" },
@@ -49,17 +49,17 @@ const Sidebar = ({ activeItem, onItemClick }) => {
           </Avatar>
           <Box>
             <Typography variant="h6" sx={{ color: "#333", fontWeight: "600" }}>
-               {localStorage.getItem('userName')}
+              {localStorage.getItem("userName")}
             </Typography>
             <Typography
               variant="body2"
-              sx={{ color: "#666", fontSize: "0.8rem" }}
+              sx={{ color: "#023A15", fontSize: "0.8rem" }}
             >
-              Email: {localStorage.getItem('userEmail')}
+              Email: {localStorage.getItem("userEmail")}
             </Typography>
             <Typography
               variant="body2"
-              sx={{ color: "#666", fontSize: "0.8rem" }}
+              sx={{ color: "#023A15", fontSize: "0.8rem" }}
             >
               Số điện thoại: 0903783442
             </Typography>
@@ -70,20 +70,14 @@ const Sidebar = ({ activeItem, onItemClick }) => {
           {menuItems.map((item) => (
             <ListItem key={item.id} disablePadding>
               <ListItemButton
-                selected={activeItem === item.id}
+                // selected={activeItem === item.id}
                 onClick={() => onItemClick(item.id)}
                 sx={{
                   borderRadius: "8px",
                   mb: 0.5,
                   backgroundColor:
                     activeItem === item.id ? "#4CAF50" : "transparent",
-                  color:
-                    activeItem === item.id
-                      ? "black"
-                      : item.color === "error"
-                      ? "#f44336"
-                      : "#666",
-                  fontWeight: activeItem === item.id ? "600" : "400",
+
                   "&:hover": {
                     backgroundColor:
                       activeItem === item.id
@@ -100,10 +94,21 @@ const Sidebar = ({ activeItem, onItemClick }) => {
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "inherit", minWidth: 40 }}>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText primary={item.label} />
+                <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
+                <ListItemText
+                  primary={item.label}
+                  primaryTypographyProps={{
+                    sx: {
+                      color:
+                        activeItem === item.id
+                          ? "white"
+                          : item.color === "error"
+                          ? "#f44336"
+                          : "#666",
+                      fontWeight: activeItem === item.id ? "600" : "400",
+                    },
+                  }}
+                />
               </ListItemButton>
             </ListItem>
           ))}

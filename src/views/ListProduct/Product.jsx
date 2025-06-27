@@ -21,13 +21,14 @@ function Product() {
         style={{ minHeight: "100vh", background: "#f2eee5" }}
       >
         <HeroBanner />
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <ProductList />
-      </Container>
-      <CustomerReviews />
-      <BlogSection />
+        <Container maxWidth="lg" sx={{ py: 4 }}>
+          <ProductList />
+        </Container>
+        <CustomerReviews />
+        <BlogSection />
       </motion.div>
-      <Chatbot/>
+      <Chatbot />
+
       <Footer />
     </Box>
   );
