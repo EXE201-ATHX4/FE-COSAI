@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-// Replace with your actual API key
+// Replace with your actual API key if still needed
 const API_KEY = 'AIzaSyD82IyWZlxx6nIy5HL2Tt0R2CZMosHd_vM';
-const genAI = new GoogleGenerativeAI(API_KEY);
 
 const Chatbox = () => {
   const [isChatboxOpen, setIsChatboxOpen] = useState(false);
@@ -12,45 +12,44 @@ const Chatbox = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const chatEndRef = useRef(null);
+  const navigate = useNavigate();
 
-  // Actual Gemini AI response function
-  const generateAIResponse = async (message) => {
+  // New API response function
+  const generateAPIResponse = async (message) => {
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        throw new Error('No access token found. Please log in.');
+      }
 
-      const chat = model.startChat({
-        history: [
-          {
-            role: 'user',
-            parts: [{ text: "Chào chatbot, bạn là chuyên gia tư vấn về các sản phẩm mỹ phẩm và chăm sóc da của Việt Nam. Hãy tư vấn chi tiết và cụ thể về các sản phẩm, lợi ích, cách sử dụng, và các thương hiệu uy tín tại Việt Nam. Trả lời bằng tiếng Việt một cách thân thiện và chuyên nghiệp." }],
-          },
-          {
-            role: 'model',
-            parts: [{ text: "Chào bạn! Tôi rất vui được hỗ trợ bạn tìm hiểu về thế giới mỹ phẩm và chăm sóc da. Bạn muốn biết gì về các sản phẩm này?" }],
-          },
-          ...messages.map(msg => ({
-            role: msg.sender === 'user' ? 'user' : 'model',
-            parts: [{ text: msg.text }]
-          }))
-        ],
-        generationConfig: {
-          maxOutputTokens: 500,
-        },
-      });
+      const response = await axios.post(
+        'https://be-cosai.onrender.com/api/chat',
+        `"${message}"`,
+        {
+          headers: {
+            'accept': '*/*',
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          }
+        }
+      );
 
-      const result = await chat.sendMessage(message);
-      return result.response.text();
+      return response.data.response;
     } catch (error) {
-      console.error('Gemini API Error:', error);
+      console.error('API Error:', error);
       throw error;
     }
   };
 
   useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken && isChatboxOpen) {
+      navigate('/login');
+    }
     if (isChatboxOpen) {
       chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, isChatboxOpen]);
+  }, [isChatboxOpen, navigate]);
 
   const handleSendMessage = async () => {
     if (inputMessage.trim() === '') return;
@@ -61,14 +60,14 @@ const Chatbox = () => {
     setIsLoading(true);
 
     try {
-      const response = await generateAIResponse(inputMessage);
+      const response = await generateAPIResponse(inputMessage);
       const aiMessage = { sender: 'ai', text: response, timestamp: new Date() };
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
-      console.error('Gemini API Error:', error);
+      console.error('API Error:', error);
       setMessages(prev => [
         ...prev,
-        { sender: 'ai', text: 'Xin lỗi, có lỗi xảy ra khi kết nối với AI. Vui lòng thử lại sau.', timestamp: new Date() }
+        { sender: 'ai', text: 'Xin lỗi, có lỗi xảy ra khi kết nối với server. Vui lòng thử lại sau.', timestamp: new Date() }
       ]);
     } finally {
       setIsLoading(false);
@@ -588,7 +587,7 @@ const Chatbox = () => {
         /* Dark theme support */
         @media (prefers-color-scheme: dark) {
           .messages-container {
-            background: #f2eee5
+            background: #f2eee5;
           }
 
           .ai-bubble {
@@ -601,7 +600,6 @@ const Chatbox = () => {
             background: #444;
             color: #ccc;
             background: #329066;
-
           }
         }
       `}</style>

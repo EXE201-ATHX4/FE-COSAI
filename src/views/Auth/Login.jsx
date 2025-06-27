@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
-import ConfirmationDialog from "./ConfirmationDialog"; // Import the generic dialog
-import "./ConfirmationDialog.css"; // Import its CSS
+import ConfirmationDialog from "./ConfirmationDialog";
+import "./ConfirmationDialog.css";
 
 const Login = () => {
   const [phoneEmail, setPhoneEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isFormValid, setIsFormValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [showLoginSuccessDialog, setShowLoginSuccessDialog] = useState(false); // State for login success dialog
+  const [showLoginSuccessDialog, setShowLoginSuccessDialog] = useState(false);
   const navigate = useNavigate();
 
   // Logic to check form validity
@@ -29,27 +30,48 @@ const Login = () => {
     setIsFormValid(isValid);
   }, [phoneEmail, password]);
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  // Handle form submission with API call
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (isFormValid) {
-      console.log({ phoneEmail, password });
+      try {
+        const payload = {
+          emailAddress: phoneEmail,
+          password: password
+        };
 
-      // Simulate API call for login
-      // Replace with your actual authentication logic
-      if (phoneEmail === "user@gmail.com" && password === "123456") {
-        setShowLoginSuccessDialog(true); // Show success dialog on successful login
-      } else {
-        setErrorMessage("Thông tin đăng nhập không chính xác. Vui lòng thử lại.");
+        const response = await axios.post(
+          'https://be-cosai.onrender.com/api/auth/login',
+          payload,
+          {
+            headers: {
+              'accept': '*/*',
+              'Content-Type': 'application/json',
+            }
+          }
+        );
+
+        const { accessToken, refreshToken } = response.data;
+        if (accessToken && refreshToken) {
+          localStorage.setItem("isLoggedIn", "true");
+          localStorage.setItem("userEmail", phoneEmail);
+          localStorage.setItem("userName", "Gia Hưng");
+          localStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("refreshToken", refreshToken);
+          setShowLoginSuccessDialog(true);
+        }
+      } catch (error) {
+        if (error.response && error.response.data) {
+          setErrorMessage("Thông tin đăng nhập không chính xác. Vui lòng thử lại.");
+        } else {
+          setErrorMessage("Đã có lỗi xảy ra. Vui lòng thử lại.");
+        }
       }
     }
   };
 
   const handleLoginSuccessConfirm = () => {
     setShowLoginSuccessDialog(false);
-    localStorage.setItem("isLoggedIn", "true"); // Set login status in localStorage
-    localStorage.setItem("userEmail", phoneEmail); // Store user email in localStorage
-    localStorage.setItem("userName", "Gia Hưng"); // Store user name in localStorage (you can modify this)
     navigate("/"); // Navigate to home page after successful login
   };
 
@@ -136,7 +158,6 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Confirmation Dialog for Login Success */}
       <ConfirmationDialog
         open={showLoginSuccessDialog}
         icon="success"
@@ -144,7 +165,7 @@ const Login = () => {
         message="Chào mừng bạn quay trở lại! Đang chuyển hướng về trang chủ."
         primaryButtonText="Tiếp tục"
         onPrimaryButtonClick={handleLoginSuccessConfirm}
-        onClose={handleLoginSuccessConfirm} // Allow closing dialog to also navigate
+        onClose={handleLoginSuccessConfirm}
       />
     </>
   );
