@@ -38,6 +38,7 @@ import imgHome1 from "../../assets/IMG_Home_1.png";
 import imgHome2 from "../../assets/IMG_Home_2.png";
 import cocoonImg from "../../assets/cocoon.png";
 
+
 // Trang chủ mẫu
 export default function Home() {
   return (
@@ -305,7 +306,7 @@ const CombinedBeautyLayout = () => {
                 YOUR BEAUTY
               </Typography>
 
-              <Typography
+              {/* <Typography
                 variant="body1"
                 sx={{
                   fontSize: "1rem",
@@ -315,7 +316,7 @@ const CombinedBeautyLayout = () => {
                 }}
               >
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit
-              </Typography>
+              </Typography> */}
 
               <Box
                 sx={{
@@ -385,6 +386,7 @@ const CombinedBeautyLayout = () => {
                       cursor: "pointer",
                       textDecoration: "underline",
                     }}
+                     onClick={() => navigate("/cosai")}
                   >
                     Trải nghiệm ngay
                   </Typography>
@@ -532,7 +534,7 @@ const CombinedBeautyLayout = () => {
 
             {/* Center Text Content */}
             <div style={{ textAlign: "center", padding: "2rem" }}>
-              <h6
+              {/* <h6
                 style={{
                   fontWeight: "medium",
                   color: "#023A15",
@@ -543,7 +545,7 @@ const CombinedBeautyLayout = () => {
                 }}
               >
                 Alive every moment
-              </h6>
+              </h6> */}
               <h2
                 style={{
                   fontWeight: "bold",
@@ -556,7 +558,7 @@ const CombinedBeautyLayout = () => {
               >
                 Beauty is all about you.
               </h2>
-              <p
+              {/* <p
                 style={{
                   color: "#666",
                   marginBottom: "2rem",
@@ -568,7 +570,7 @@ const CombinedBeautyLayout = () => {
               >
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
                 lobortis elit sapien ut pretium. Donec tincidunt, quam.
-              </p>
+              </p> */}
 
               {/* Decorative element behind text */}
               <div

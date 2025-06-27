@@ -7,6 +7,7 @@ import BlogSection from "./BlogSection";
 import { Footer } from "../../components/footer";
 import { Header } from "../../components/header";
 import { motion } from "framer-motion";
+import Chatbot from "../Cosai/ChatBox";
 
 function Product() {
   return (
@@ -26,7 +27,7 @@ function Product() {
       <CustomerReviews />
       <BlogSection />
       </motion.div>
-      
+      <Chatbot/>
       <Footer />
     </Box>
   );
