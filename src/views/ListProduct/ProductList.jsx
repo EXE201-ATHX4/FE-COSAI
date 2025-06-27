@@ -33,66 +33,12 @@ import { products, brands, categories, priceRanges } from "./data/products";
 function ProductList() {
   const navigate = useNavigate();
   const [filteredProducts, setFilteredProducts] = useState(products);
-  const [expandedFilters, setExpandedFilters] = useState({
-    brand: false,
-    price: false,
-    category: false,
-  });
   const [filters, setFilters] = useState({
     brands: [],
     priceRange: null,
     categories: [],
   });
   const [activeFilters, setActiveFilters] = useState([]);
-
-  // Xử lý khi người dùng nhấp vào tiêu đề bộ lọc
-  const handleToggleFilter = (filterType) => {
-    setExpandedFilters({
-      ...expandedFilters,
-      [filterType]: !expandedFilters[filterType],
-    });
-  };
-
-  // Xử lý khi người dùng chọn thương hiệu
-  const handleBrandChange = (brand) => {
-    const currentBrands = [...filters.brands];
-    if (currentBrands.includes(brand)) {
-      setFilters({
-        ...filters,
-        brands: currentBrands.filter((b) => b !== brand),
-      });
-    } else {
-      setFilters({
-        ...filters,
-        brands: [...currentBrands, brand],
-      });
-    }
-  };
-
-  // Xử lý khi người dùng chọn khoảng giá
-  const handlePriceRangeChange = (event) => {
-    setFilters({
-      ...filters,
-      priceRange:
-        event.target.value === filters.priceRange ? null : event.target.value,
-    });
-  };
-
-  // Xử lý khi người dùng chọn danh mục
-  const handleCategoryChange = (category) => {
-    const currentCategories = [...filters.categories];
-    if (currentCategories.includes(category)) {
-      setFilters({
-        ...filters,
-        categories: currentCategories.filter((c) => c !== category),
-      });
-    } else {
-      setFilters({
-        ...filters,
-        categories: [...currentCategories, category],
-      });
-    }
-  };
 
   // Xử lý khi người dùng nhấn nút tìm kiếm
   const handleSearch = () => {
@@ -311,7 +257,10 @@ function ProductList() {
             alignItems: "center",
           }}
         >
-          <Typography variant="body2" sx={{ fontWeight: "medium" }}>
+          <Typography
+            variant="body2"
+            sx={{ fontWeight: "medium", color: "#213547" }}
+          >
             Bộ lọc đang áp dụng:
           </Typography>
           {activeFilters.map((filter, index) => (
@@ -338,7 +287,10 @@ function ProductList() {
       )}
       {/* Hiển thị số lượng sản phẩm tìm thấy */}
       <Box sx={{ mb: 3 }}>
-        <Typography variant="body1" sx={{ fontWeight: "medium" }}>
+        <Typography
+          variant="body1"
+          sx={{ fontWeight: "medium", color: "#213547" }}
+        >
           Tìm thấy {filteredProducts.length} sản phẩm
         </Typography>
       </Box>

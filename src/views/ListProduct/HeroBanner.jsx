@@ -1,20 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Button } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import banner from "../../assets/banner.png";
 import banner2 from "../../assets/banner2.png";
 import banner3 from "../../assets/banner3.png";
 
+const banners = [banner, banner2, banner3];
+
 function HeroBanner() {
   const [currentBanner, setCurrentBanner] = useState(0);
 
   const handlePrev = () => {
-    setCurrentBanner((prev) => (prev === 0 ? 0 : prev - 1));
+    setCurrentBanner((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentBanner((prev) => (prev === 0 ? 0 : prev + 1));
+    setCurrentBanner((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBanner((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Box sx={{ position: "relative", overflow: "hidden", mb: 0 }}>
@@ -25,20 +35,55 @@ function HeroBanner() {
           width: "100%",
         }}
       >
+        {banners.map((img, index) => (
+          <Box
+            key={index}
+            component="img"
+            src={img}
+            alt={`Banner ${index + 1}`}
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              opacity: currentBanner === index ? 1 : 0,
+              transition: "opacity 0.5s ease-in-out",
+              zIndex: currentBanner === index ? 1 : 0,
+            }}
+          />
+        ))}
+
+        {/* Indicator Dots */}
         <Box
-          component="img"
-          src={banner}
-          alt="Nước Tẩy Trang"
           sx={{
             position: "absolute",
-            top: 0,
-            left: 0,
+            bottom: 16,
             width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            zIndex: 1,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 1,
+            zIndex: 2,
           }}
-        />
+        >
+          {banners.map((_, index) => (
+            <Box
+              key={index}
+              onClick={() => setCurrentBanner(index)}
+              sx={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                backgroundColor:
+                  currentBanner === index ? "#1976d2" : "rgba(255,255,255,0.6)",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+              }}
+            />
+          ))}
+        </Box>
       </Box>
 
       <Button
