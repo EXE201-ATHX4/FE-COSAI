@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./Register.css";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
 import { useNavigate } from "react-router-dom";
-import "./ConfirmationDialog.css"; // Import its CSS
+import "./ConfirmationDialog.css";
 import ConfirmationDialog from "./ConfirmationDialog";
 
 const Register = () => {
@@ -18,7 +19,7 @@ const Register = () => {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const navigate = useNavigate();
 
-  // Logic kiểm tra form hợp lệ
+  // Form validation logic
   useEffect(() => {
     let isValid = false;
     setErrorMessage("");
@@ -28,7 +29,7 @@ const Register = () => {
     } else if (!password) {
       setErrorMessage("Vui lòng nhập mật khẩu.");
     } else if (password.length < 6) {
-        setErrorMessage("Mật khẩu phải có ít nhất 6 ký tự.");
+      setErrorMessage("Mật khẩu phải có ít nhất 6 ký tự.");
     } else if (!confirmPassword) {
       setErrorMessage("Vui lòng xác nhận mật khẩu.");
     } else if (password !== confirmPassword) {
@@ -56,19 +57,50 @@ const Register = () => {
     setIsFormValid(isValid);
   }, [fullName, phone, email, password, confirmPassword, activeTab]);
 
-  // Xử lý khi submit form
-  const handleSubmit = (e) => {
+  // Handle form submission with API call
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (isFormValid) {
-      console.log({ fullName, phone, email, password });
-      // Simulate API call success
-      setShowSuccessDialog(true);
+      try {
+        const payload = activeTab === "email" 
+          ? { email, password }
+          : { phone, password };
+
+        const response = await axios.post(
+          'https://be-cosai.onrender.com/api/auth/register',
+          payload,
+          {
+            headers: {
+              'accept': '*/*',
+              'Content-Type': 'application/json',
+            }
+          }
+        );
+
+        if (response.status === 200) {
+          setShowSuccessDialog(true);
+        }
+      } catch (error) {
+        if (error.response && error.response.data) {
+          const errors = error.response.data;
+          if (typeof errors === 'string') {
+            // Handle case where response is a simple string (e.g., "Email is already registered")
+            setErrorMessage(errors);
+          } else if (Array.isArray(errors)) {
+            // Handle array of error objects (e.g., password requirements)
+            const errorMessages = errors.map(err => err.description).join(' ');
+            setErrorMessage(errorMessages);
+          }
+        } else {
+          setErrorMessage("Đã có lỗi xảy ra. Vui lòng thử lại.");
+        }
+      }
     }
   };
 
   const handleRegisterSuccessConfirm = () => {
     setShowSuccessDialog(false);
-    navigate("/login"); // Navigate to login page
+    navigate("/login");
   };
 
   return (
@@ -209,15 +241,14 @@ const Register = () => {
         </div>
       </div>
 
-      {/* Confirmation Dialog for Register Success */}
       <ConfirmationDialog
         open={showSuccessDialog}
         icon="success"
         title="Đăng ký thành công!"
-        message="Tài khoản của bạn đã được tạo. Vui lòng đăng nhập để tiếp tục."
+        message="Vui lòng kiểm tra email của bạn để xác nhận tài khoản."
         primaryButtonText="Đăng nhập ngay"
         onPrimaryButtonClick={handleRegisterSuccessConfirm}
-        onClose={handleRegisterSuccessConfirm} // Allow closing dialog to also navigate
+        onClose={handleRegisterSuccessConfirm}
       />
     </>
   );

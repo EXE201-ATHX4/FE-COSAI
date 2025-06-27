@@ -258,7 +258,7 @@ export const Header = () => {
               }}
               onClick={() => navigate("/cart")} // Navigate to cart page
             >
-              <Badge badgeContent={3} color="error">
+              <Badge color="error">
                 {" "}
                 {/* Example badge content */}
                 <ShoppingCartIcon />

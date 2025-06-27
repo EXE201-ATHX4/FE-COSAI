@@ -17,7 +17,7 @@ export const Footer = () => {
               />
             </div>
 
-            <div>
+            <div >
               <h3 className="section-title">Về chúng tôi</h3>
               <p className="section-description">Cosmetic Selling</p>
               <div className="list-group">
@@ -34,9 +34,9 @@ export const Footer = () => {
               </h3>
               <p className="section-description-relaxed">
                 Bản quyền thuộc về Công ty TNHH COSMETIC.
-                <br />
+               
                 Mọi sản phẩm và dịch vụ đều được bảo hộ theo
-                <br />
+                
                 luật pháp hiện hành.
               </p>
             </div>
@@ -62,17 +62,13 @@ export const Footer = () => {
 
             <div className="contact-info-item">
               <span className="contact-icon">📞</span>
-              <span className="contact-label">Điện thoại</span>
+              <span className="contact-label">Điện thoại: 1900 123 456</span>
             </div>
-            <p className="section-description">1900 123 456</p>
 
             <div className="contact-info-item">
               <span className="contact-icon">✉️</span>
-              <span className="contact-label">Email</span>
+              <span className="contact-label">Email: cosmeticselling@cosmeticselling</span>
             </div>
-            <p className="section-description">
-              cosmeticselling@cosmeticselling
-            </p>
           </div>
 
           {/* Column 3: Company Policies */}
