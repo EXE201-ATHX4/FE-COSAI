@@ -19,6 +19,7 @@ const Cart = () => {
       brand:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrh0Itxav60DHt1xqIvq3574tO-28-GKMdXg&s",
       selected: true,
+      category: "1"
     },
     {
       id: 2,
@@ -31,6 +32,8 @@ const Cart = () => {
       brand:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrh0Itxav60DHt1xqIvq3574tO-28-GKMdXg&s",
       selected: true,
+      category: "2"
+
     },
     {
       id: 3,
@@ -43,6 +46,8 @@ const Cart = () => {
       brand:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrh0Itxav60DHt1xqIvq3574tO-28-GKMdXg&s",
       selected: true,
+      category: "3"
+
     },
     {
       id: 4,
@@ -56,12 +61,14 @@ const Cart = () => {
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrh0Itxav60DHt1xqIvq3574tO-28-GKMdXg&s",
       selected: true,
       isVegan: true,
+      category: "4"
+
     },
     {
       id: 5,
       name: "Son dưỡng dầu dừa Bến Tre Cocoon",
       volume: "5g",
-      price: 95000,
+      price: 1000,
       quantity: 1,
       image:
         "https://image.cocoonvietnam.com/uploads/Son_duong_dau_dua_26498c9936.jpg",
@@ -69,6 +76,8 @@ const Cart = () => {
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrh0Itxav60DHt1xqIvq3574tO-28-GKMdXg&s",
       selected: true,
       isVegan: true,
+      category: "5"
+
     },
   ]);
 
@@ -293,15 +302,16 @@ const Cart = () => {
 
 
   // --- New function to handle checkout and save to localStorage ---
-  const handleCheckout = () => {
+ const handleCheckout = () => {
     // 1. Create the order object with relevant data
     const orderData = {
-      id: `order_${Date.now()}`, // Unique ID for the order
+      id: `order_${Date.now()}`,
       items: selectedItems.map(item => ({
         id: item.id,
         name: item.name,
         price: item.price,
         quantity: item.quantity,
+        category: item.category, // <-- Lấy category từ item và lưu vào localStorage
       })),
       shippingInfo: shippingInfo,
       summary: {
