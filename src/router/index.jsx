@@ -16,6 +16,7 @@ import RegisterPage from "../views/Auth/Register";
 import Account from "../views/Account/Account";
 import PaymentSuccess from "../views/Payment/PaymentSuccess";
 import PaymentFailure from "../views/Payment/PaymentFailure";
+import NotFound from "../views/NotFound/NotFound";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -38,6 +39,7 @@ const AnimatedRoutes = () => {
       <Route path="/account" element={<Account />} />
       <Route path="/order/:idOrder/paymentSuccess" element={<PaymentSuccess />} />
       <Route path="/order/:idOrder/paymentFailure" element={<PaymentFailure />} />
+      <Route path="*" element={<NotFound />} /> {/* Thêm dòng này */}
 
     </Routes>
   );
