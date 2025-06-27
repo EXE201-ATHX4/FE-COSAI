@@ -291,6 +291,40 @@ const Cart = () => {
   // Final total calculation
   const finalTotal = subtotal - discountAmount + shippingFee;
 
+
+  // --- New function to handle checkout and save to localStorage ---
+  const handleCheckout = () => {
+    // 1. Create the order object with relevant data
+    const orderData = {
+      id: `order_${Date.now()}`, // Unique ID for the order
+      items: selectedItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+      shippingInfo: shippingInfo,
+      summary: {
+        subtotal: subtotal,
+        discountAmount: discountAmount,
+        shippingFee: shippingFee,
+        finalTotal: finalTotal,
+      },
+      createdAt: new Date().toISOString(),
+    };
+
+    // 2. Save the order data to localStorage
+    try {
+      localStorage.setItem('orderInfo', JSON.stringify(orderData));
+      console.log('Order data saved to localStorage:', orderData);
+      // 3. Navigate to the payment page
+      navigate("/cart/payment");
+    } catch (error) {
+      console.error("Failed to save order data to localStorage:", error);
+      alert("Có lỗi xảy ra khi lưu thông tin đơn hàng. Vui lòng thử lại.");
+    }
+  };
+
   return (
     <>
       <Header />
@@ -590,7 +624,7 @@ const Cart = () => {
                 <span>{formatPrice(finalTotal)}</span>
               </div>
               <button
-                onClick={() => navigate("/cart/payment")}
+                onClick={handleCheckout} // Call the new function
                 className="checkout-btn-right"
                 disabled={isCheckoutDisabled} // Apply the disabled state here
               >

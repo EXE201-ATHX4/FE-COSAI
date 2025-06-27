@@ -14,6 +14,8 @@ import ProductDetailPage from "../views/ProductDetail/ProductDetail";
 import LoginPage from "../views/Auth/Login";
 import RegisterPage from "../views/Auth/Register";
 import Account from "../views/Account/Account";
+import PaymentSuccess from "../views/Payment/PaymentSuccess";
+import PaymentFailure from "../views/Payment/PaymentFailure";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -34,6 +36,9 @@ const AnimatedRoutes = () => {
       <Route path="/cart" element={<CartPage />} />
       <Route path="/cart/payment" element={<PaymentPage />} />
       <Route path="/account" element={<Account />} />
+      <Route path="/order/:idOrder/paymentSuccess" element={<PaymentSuccess />} />
+      <Route path="/order/:idOrder/paymentFailure" element={<PaymentFailure />} />
+
     </Routes>
   );
 };

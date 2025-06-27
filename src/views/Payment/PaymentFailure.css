@@ -1,0 +1,594 @@
+/* Payment Failure Page Styles */
+
+/* Container and Main Layout */
+.payment-failure-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 50%, #fecaca 100%);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Card Animation */
+.payment-failure-card {
+  width: 100%;
+  max-width: 40rem;
+  transform: scale(0.95) translateY(2rem);
+  opacity: 0;
+  transition: all 1s ease;
+}
+
+.payment-failure-card.visible {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+/* Main Failure Card */
+.failure-card {
+  background: white;
+  border-radius: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(239, 68, 68, 0.25);
+  overflow: hidden;
+  border: 1px solid #fecaca;
+}
+
+/* Header Section */
+.header-section-failure {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  padding: 3rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-overlay-failure {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.header-content {
+  position: relative;
+  z-index: 10;
+}
+
+.failure-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  margin-bottom: 1.5rem;
+  animation: shake 0.8s infinite;
+}
+
+.x-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: white;
+}
+
+.failure-title {
+  color: white;
+  font-size: 1.875rem;
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+}
+
+.failure-message {
+  color: #fecaca;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+/* Decorative Elements */
+.decoration {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+}
+
+.decoration-1 {
+  top: 1rem;
+  right: 1rem;
+  width: 8rem;
+  height: 8rem;
+}
+
+.decoration-2 {
+  bottom: 1rem;
+  left: 1rem;
+  width: 6rem;
+  height: 6rem;
+}
+
+/* Content Section */
+.content-section {
+  padding: 2rem;
+}
+
+/* Error Summary */
+.error-summary {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid #fecaca;
+}
+
+.section-title-error {
+  color: #dc2626;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.section-icon-error {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5rem;
+  color: #dc2626;
+}
+
+.error-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.error-card {
+  background: white;
+  border: 1px solid #fecaca;
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.error-code {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.error-label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.error-value {
+  font-family: 'Courier New', monospace;
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+.error-message {
+  border-top: 1px solid #fecaca;
+  padding-top: 0.5rem;
+}
+
+.error-description {
+  color: #dc2626;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* Order Summary */
+.order-summary-failure {
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e5e7eb;
+}
+
+.section-title-neutral {
+  color: #374151;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.section-icon-neutral {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5rem;
+  color: #6b7280;
+}
+
+.order-details-failure {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  color: #6b7280;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.detail-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.25rem;
+}
+
+.order-id-badge-failure {
+  font-weight: bold;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+.detail-value {
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.total-amount-failure {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #6b7280;
+}
+
+/* Products Section */
+.products-section {
+  margin-bottom: 2rem;
+}
+
+.products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.product-item-failure {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  opacity: 0.8;
+}
+
+.product-info {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-badge-failure {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+}
+
+.quantity-number {
+  color: white;
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
+.product-name {
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.product-price-failure {
+  font-weight: bold;
+  color: #6b7280;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 640px) {
+  .action-buttons {
+    flex-direction: row;
+  }
+}
+
+.retry-button {
+  flex: 1;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  font-weight: bold;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.retry-button:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: scale(1.05);
+  box-shadow: 0 20px 25px -5px rgba(239, 68, 68, 0.4);
+}
+
+.back-button {
+  flex: 1;
+  background: white;
+  color: #6b7280;
+  font-weight: bold;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 2px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-button:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  transform: scale(1.05);
+}
+
+.button-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5rem;
+}
+
+/* Alternative Payment Methods */
+.alternative-section {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid #bae6fd;
+}
+
+.alternative-title {
+  color: #0369a1;
+  font-size: 1.125rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.payment-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+}
+
+.payment-method-btn {
+  background: white;
+  border: 2px solid #bae6fd;
+  border-radius: 0.75rem;
+  padding: 1rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #0369a1;
+}
+
+.payment-method-btn:hover {
+  background: #f0f9ff;
+  border-color: #0ea5e9;
+  transform: translateY(-2px);
+}
+
+.payment-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Support Section */
+.support-section {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid #fde68a;
+}
+
+.support-content {
+  text-align: center;
+}
+
+.support-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: #fde68a;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.support-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #d97706;
+}
+
+.support-title {
+  font-weight: bold;
+  color: #92400e;
+  margin-bottom: 0.5rem;
+}
+
+.support-message {
+  color: #a16207;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.highlight-error {
+  font-weight: bold;
+  color: #dc2626;
+}
+
+.support-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.875rem;
+  flex-wrap: wrap;
+}
+
+.support-link {
+  display: flex;
+  align-items: center;
+  color: #d97706;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.support-link:hover {
+  color: #b45309;
+}
+
+.link-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.25rem;
+}
+
+/* Footer Message */
+.footer-message-failure {
+  text-align: center;
+  margin-top: 2rem;
+  color: #6b7280;
+}
+
+.footer-message-failure p {
+  font-size: 0.875rem;
+}
+
+/* Shake Effect Animation */
+.shake-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  transition: opacity 1s ease;
+}
+
+.shake-container.visible {
+  opacity: 1;
+}
+
+.shake-container.hidden {
+  opacity: 0;
+}
+
+.shake-piece {
+  position: absolute;
+  width: 0.25rem;
+  height: 1rem;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border-radius: 0.125rem;
+  animation: shake-fall 1s ease-out;
+}
+
+/* Animations */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes shake-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .payment-failure-container {
+    padding: 0.5rem;
+  }
+  
+  .header-section-failure {
+    padding: 2rem 1rem;
+  }
+  
+  .failure-title {
+    font-size: 1.5rem;
+  }
+  
+  .failure-message {
+    font-size: 1rem;
+  }
+  
+  .content-section {
+    padding: 1.5rem;
+  }
+  
+  .support-links {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .payment-methods {
+    grid-template-columns: 1fr;
+  }
+}

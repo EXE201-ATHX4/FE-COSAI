@@ -26,8 +26,8 @@ const AccountInfo = () => {
   // Address data
   const addresses = {
     default: {
-      name: "Nguyễn Văn Tèo",
-      email: "teovannguyen@gmail.com",
+      name: localStorage.getItem("userName") || "",
+      email: localStorage.getItem("userEmail") || "",
       phone: "0903783442",
       birthDate: "01/01/2000",
       address: "Số 45 Nguyễn Đình Chiểu\nPhường Đa Kao, Quận 1, TP.HCM",
