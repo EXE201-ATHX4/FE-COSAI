@@ -19,6 +19,7 @@ import ProcessStepsSection from "./sections/ProcessOverviewSection";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
 import { motion } from "framer-motion";
+import Chatbox from "./ChatBox";
 
 export const Cosai = () => {
   // Testimonials Section Component
@@ -236,6 +237,7 @@ export const Cosai = () => {
         <TestimonialsSection />
         <CTASection />
       </motion.div>
+      <Chatbox/>
 
       <Footer />
     </Box>
