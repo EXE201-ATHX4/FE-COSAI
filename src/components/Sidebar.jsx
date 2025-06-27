@@ -49,13 +49,13 @@ const Sidebar = ({ activeItem, onItemClick }) => {
           </Avatar>
           <Box>
             <Typography variant="h6" sx={{ color: "#333", fontWeight: "600" }}>
-              Nguyễn Văn Tèo
+               {localStorage.getItem('userName')}
             </Typography>
             <Typography
               variant="body2"
               sx={{ color: "#666", fontSize: "0.8rem" }}
             >
-              Email: teovannguyen@gmail.com
+              Email: {localStorage.getItem('userEmail')}
             </Typography>
             <Typography
               variant="body2"
