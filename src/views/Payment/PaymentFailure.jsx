@@ -223,13 +223,13 @@ const PaymentFailure = () => {
                 </p>
                 
                 <div className="support-links">
-                  <a href="mailto:support@veganbeauty.vn" className="support-link">
+                  <a href="mailto:cosai.exe.contact@gmail.com" className="support-link">
                     <Mail className="link-icon" />
-                    support@veganbeauty.vn
+                    cosai.exe.contact@gmail.com
                   </a>
-                  <a href="tel:1900-XXX-XXX" className="support-link">
+                  <a href="tel:0338554925" className="support-link">
                     <Phone className="link-icon" />
-                    1900-XXX-XXX
+                   0338554925
                   </a>
                 </div>
               </div>

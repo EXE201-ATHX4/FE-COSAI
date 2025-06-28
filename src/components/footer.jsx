@@ -62,12 +62,12 @@ export const Footer = () => {
 
             <div className="contact-info-item">
               <span className="contact-icon">📞</span>
-              <span className="contact-label">Điện thoại: 1900 123 456</span>
+              <span className="contact-label">Điện thoại: 0338554925</span>
             </div>
 
             <div className="contact-info-item">
               <span className="contact-icon">✉️</span>
-              <span className="contact-label">Email: cosmeticselling@cosmeticselling</span>
+              <span className="contact-label">Email: cosai.exe.contact@gmail.com</span>
             </div>
           </div>
 
