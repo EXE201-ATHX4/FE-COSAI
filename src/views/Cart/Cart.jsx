@@ -7,79 +7,12 @@ import { motion } from "framer-motion";
 
 const Cart = () => {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Nước tẩy trang hoa hồng Cocoon",
-      volume: "200ml",
-      price: 150000,
-      quantity: 1,
-      image:
-        "https://image.cocoonvietnam.com/uploads/z4372805343245_27ea562aa5cabe55737d80cef8acfcb5_e4d50792fc.jpg",
-      brand:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrh0Itxav60DHt1xqIvq3574tO-28-GKMdXg&s",
-      selected: true,
-      category: "1"
-    },
-    {
-      id: 2,
-      name: "Tẩy da chết cà phê Đắk Lắk Cocoon",
-      volume: "150ml",
-      price: 165000,
-      quantity: 1,
-      image:
-        "https://image.cocoonvietnam.com/uploads/z4147355364575_e4b88c65711b8261d9c996e6797b60a1_83f203bec3.jpg",
-      brand:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrh0Itxav60DHt1xqIvq3574tO-28-GKMdXg&s",
-      selected: true,
-      category: "2"
 
-    },
-    {
-      id: 3,
-      name: "Sữa rửa mặt nghệ Hưng Yên Cocoon",
-      volume: "140ml",
-      price: 210000,
-      quantity: 1,
-      image:
-        "https://image.cocoonvietnam.com/uploads/z3526709694076_945daa53da7e8d0d674d19b2d92dd792_e41da5dad9.jpg",
-      brand:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrh0Itxav60DHt1xqIvq3574tO-28-GKMdXg&s",
-      selected: true,
-      category: "3"
-
-    },
-    {
-      id: 4,
-      name: "Dầu gội bưởi và bồ kết Cocoon",
-      volume: "300ml",
-      price: 180000,
-      quantity: 1,
-      image:
-        "https://image.cocoonvietnam.com/uploads/W_Zmg_Kym_A_c3f647b8a2.jpeg",
-      brand:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrh0Itxav60DHt1xqIvq3574tO-28-GKMdXg&s",
-      selected: true,
-      isVegan: true,
-      category: "4"
-
-    },
-    {
-      id: 5,
-      name: "Son dưỡng dầu dừa Bến Tre Cocoon",
-      volume: "5g",
-      price: 1000,
-      quantity: 1,
-      image:
-        "https://image.cocoonvietnam.com/uploads/Son_duong_dau_dua_26498c9936.jpg",
-      brand:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrh0Itxav60DHt1xqIvq3574tO-28-GKMdXg&s",
-      selected: true,
-      isVegan: true,
-      category: "5"
-
-    },
-  ]);
+  // Initialize cartItems from localStorage or empty array
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
   const [selectAll, setSelectAll] = useState(true);
   const [shippingInfo, setShippingInfo] = useState({
@@ -100,6 +33,19 @@ const Cart = () => {
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
 
+  // Check if user is logged in on component mount
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  // Update localStorage whenever cartItems change
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [cartItems]);
+
   // Derived state for selected items and subtotal
   const selectedItems = cartItems.filter((item) => item.selected);
   const subtotal = selectedItems.reduce(
@@ -114,7 +60,7 @@ const Cart = () => {
   // Calculate shipping fee conditionally
   const [shippingFee, setShippingFee] = useState(0);
 
-  // --- New state for button disabled status ---
+  // State for checkout button disabled status
   const [isCheckoutDisabled, setIsCheckoutDisabled] = useState(true);
 
   // Effect to sync 'selectAll' checkbox with individual item selections
@@ -123,8 +69,6 @@ const Cart = () => {
   }, [cartItems]);
 
   // --- API Integration for Provinces, Districts, Wards ---
-
-  // Fetches all provinces when the component mounts
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
@@ -133,7 +77,6 @@ const Cart = () => {
         setProvinces(data);
       } catch (error) {
         console.error("Error loading provinces:", error);
-        // Fallback data in case the API call fails
         setProvinces([
           { code: 79, name: "TP. Hồ Chí Minh" },
           { code: 1, name: "Hà Nội" },
@@ -142,9 +85,8 @@ const Cart = () => {
       }
     };
     fetchProvinces();
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []);
 
-  // Fetches districts when the selected province changes
   useEffect(() => {
     if (shippingInfo.province) {
       const fetchDistricts = async () => {
@@ -154,8 +96,8 @@ const Cart = () => {
           );
           const data = await response.json();
           setDistricts(data.districts || []);
-          setWards([]); // Clear wards when province changes
-          setShippingInfo((prev) => ({ ...prev, district: "", ward: "" })); // Reset district and ward in shipping info
+          setWards([]);
+          setShippingInfo((prev) => ({ ...prev, district: "", ward: "" }));
         } catch (error) {
           console.error("Error loading districts:", error);
           setDistricts([]);
@@ -164,14 +106,12 @@ const Cart = () => {
       };
       fetchDistricts();
     } else {
-      // If no province is selected, clear districts and wards
       setDistricts([]);
       setWards([]);
       setShippingInfo((prev) => ({ ...prev, district: "", ward: "" }));
     }
-  }, [shippingInfo.province]); // Dependency: re-run when shippingInfo.province changes
+  }, [shippingInfo.province]);
 
-  // Fetches wards when the selected district changes
   useEffect(() => {
     if (shippingInfo.district) {
       const fetchWards = async () => {
@@ -181,7 +121,7 @@ const Cart = () => {
           );
           const data = await response.json();
           setWards(data.wards || []);
-          setShippingInfo((prev) => ({ ...prev, ward: "" })); // Reset ward in shipping info
+          setShippingInfo((prev) => ({ ...prev, ward: "" }));
         } catch (error) {
           console.error("Error loading wards:", error);
           setWards([]);
@@ -189,15 +129,12 @@ const Cart = () => {
       };
       fetchWards();
     } else {
-      // If no district is selected, clear wards
       setWards([]);
       setShippingInfo((prev) => ({ ...prev, ward: "" }));
     }
-  }, [shippingInfo.district]); // Dependency: re-run when shippingInfo.district changes
+  }, [shippingInfo.district]);
 
-  // --- End API Integration ---
-
-  // Effect to calculate shipping fee based on shipping info and selected items
+  // Effect to calculate shipping fee
   useEffect(() => {
     const isShippingInfoComplete =
       shippingInfo.fullName &&
@@ -209,13 +146,13 @@ const Cart = () => {
       shippingInfo.ward;
 
     if (isShippingInfoComplete && selectedItems.length > 0) {
-      setShippingFee(35000); // Apply shipping fee
+      setShippingFee(35000);
     } else {
-      setShippingFee(0); // No shipping fee
+      setShippingFee(0);
     }
-  }, [shippingInfo, selectedItems.length]); // Dependencies: shippingInfo and number of selected items
+  }, [shippingInfo, selectedItems.length]);
 
-  // --- New useEffect to manage checkout button disabled state ---
+  // Effect to manage checkout button disabled state
   useEffect(() => {
     const areAllFieldsFilled =
       shippingInfo.fullName.trim() !== "" &&
@@ -226,15 +163,14 @@ const Cart = () => {
       shippingInfo.district !== "" &&
       shippingInfo.ward !== "";
 
-    // The button is enabled only if there are selected items AND all required fields are filled
     setIsCheckoutDisabled(!(selectedItems.length > 0 && areAllFieldsFilled));
-  }, [shippingInfo, selectedItems.length]); // Re-run when shippingInfo or selected items change
+  }, [shippingInfo, selectedItems.length]);
 
   const updateQuantity = (id, change) => {
     setCartItems((prevItems) =>
       prevItems.map((item) => {
         if (item.id === id) {
-          const newQuantity = Math.max(1, item.quantity + change); // Quantity cannot go below 1
+          const newQuantity = Math.max(1, item.quantity + change);
           return { ...item, quantity: newQuantity };
         }
         return item;
@@ -259,61 +195,52 @@ const Cart = () => {
   };
 
   const removeItem = (id) => {
-    // Custom modal instead of window.confirm for better UX in a real app
     if (window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
       setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
     }
   };
 
   const removeSelectedItems = () => {
-    // Custom modal instead of window.confirm for better UX in a real app
     if (window.confirm("Bạn có chắc chắn muốn xóa các sản phẩm đã chọn?")) {
       setCartItems((prevItems) => prevItems.filter((item) => !item.selected));
     }
   };
 
-  // Handler for changes in shipping information input fields
   const handleShippingInfoChange = (e) => {
     const { name, value, type, checked } = e.target;
     setShippingInfo((prevInfo) => ({
       ...prevInfo,
-      [name]: type === "checkbox" ? checked : value, // Handle checkbox vs text input
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  // Handler for applying discount code
   const applyDiscount = () => {
-    // This is a simplified example. In a real app, validate with backend.
     if (discountCode.toUpperCase() === "FREESHIP") {
-      setDiscountAmount(subtotal * 0.1); // Apply 10% discount
+      setDiscountAmount(subtotal * 0.1);
     } else {
-      setDiscountAmount(0); // No discount
-      alert("Mã giảm giá không hợp lệ!"); // Custom modal for alert instead of window.alert
+      setDiscountAmount(0);
+      alert("Mã giảm giá không hợp lệ!");
     }
   };
 
-  // Helper function to format price to Vietnamese currency
   const formatPrice = (price) => {
     return new Intl.NumberFormat("vi-VN").format(price) + " ₫";
   };
 
-  // Final total calculation
   const finalTotal = subtotal - discountAmount + shippingFee;
 
-
-  // --- New function to handle checkout and save to localStorage ---
- const handleCheckout = () => {
-    // 1. Create the order object with relevant data
+  const handleCheckout = () => {
     const orderData = {
       id: `order_${Date.now()}`,
-      items: selectedItems.map(item => ({
+      items: selectedItems.map((item) => ({
         id: item.id,
         name: item.name,
         price: item.price,
         quantity: item.quantity,
-        category: item.category, // <-- Lấy category từ item và lưu vào localStorage
+        category: item.category,
       })),
       shippingInfo: shippingInfo,
+
       summary: {
         subtotal: subtotal,
         discountAmount: discountAmount,
@@ -323,11 +250,9 @@ const Cart = () => {
       createdAt: new Date().toISOString(),
     };
 
-    // 2. Save the order data to localStorage
     try {
-      localStorage.setItem('orderInfo', JSON.stringify(orderData));
-      console.log('Order data saved to localStorage:', orderData);
-      // 3. Navigate to the payment page
+      localStorage.setItem("orderInfo", JSON.stringify(orderData));
+      console.log("Order data saved to localStorage:", orderData);
       navigate("/cart/payment");
     } catch (error) {
       console.error("Failed to save order data to localStorage:", error);
@@ -361,7 +286,6 @@ const Cart = () => {
                 <div className="col-total">Số tiền</div>
               </div>
 
-              {/* Wrapper for cart items to enable internal scrolling if content overflows */}
               <div className="cart-items-wrapper">
                 {cartItems.length === 0 ? (
                   <div className="empty-cart-message">
@@ -386,8 +310,7 @@ const Cart = () => {
                           </div>
                           <div className="product-details">
                             <div className="brand-logo">
-                              {/* Placeholder for brand logo. Replace with actual logo if available. */}
-                              <img src={item.brand} alt={item.brand} />
+                              {/* <img src={item.brand} alt="Brand" /> */}
                             </div>
                             <h4 className="product-name">{item.name}</h4>
                           </div>
@@ -503,7 +426,7 @@ const Cart = () => {
                     placeholder="Họ và tên"
                     value={shippingInfo.fullName}
                     onChange={handleShippingInfoChange}
-                    required // Added required attribute
+                    required
                   />
                 </div>
                 <div className="input-group">
@@ -515,7 +438,7 @@ const Cart = () => {
                     placeholder="Số điện thoại"
                     value={shippingInfo.phone}
                     onChange={handleShippingInfoChange}
-                    required // Added required attribute
+                    required
                   />
                 </div>
               </div>
@@ -529,7 +452,7 @@ const Cart = () => {
                     placeholder="Email nhận hóa đơn"
                     value={shippingInfo.email}
                     onChange={handleShippingInfoChange}
-                    required // Added required attribute
+                    required
                   />
                 </div>
                 <div className="input-group">
@@ -539,7 +462,7 @@ const Cart = () => {
                     name="province"
                     value={shippingInfo.province}
                     onChange={handleShippingInfoChange}
-                    required // Added required attribute
+                    required
                   >
                     <option value="">Chọn Tỉnh/Thành Phố</option>
                     {provinces.map((province) => (
@@ -559,7 +482,7 @@ const Cart = () => {
                     value={shippingInfo.district}
                     onChange={handleShippingInfoChange}
                     disabled={!shippingInfo.province || districts.length === 0}
-                    required // Added required attribute
+                    required
                   >
                     <option value="">Chọn Quận/Huyện</option>
                     {districts.map((district) => (
@@ -577,7 +500,7 @@ const Cart = () => {
                     value={shippingInfo.ward}
                     onChange={handleShippingInfoChange}
                     disabled={!shippingInfo.district || wards.length === 0}
-                    required // Added required attribute
+                    required
                   >
                     <option value="">Chọn Phường/Xã</option>
                     {wards.map((ward) => (
@@ -597,7 +520,7 @@ const Cart = () => {
                   placeholder="Số nhà, tên đường, tên tòa nhà..."
                   value={shippingInfo.address}
                   onChange={handleShippingInfoChange}
-                  required // Added required attribute
+                  required
                 />
               </div>
             </div>
@@ -626,17 +549,16 @@ const Cart = () => {
               </div>
               <div className="order-summary-row">
                 <span>Phí vận chuyển:</span>
-                <span>{formatPrice(shippingFee)}</span>{" "}
-                {/* Display the dynamically calculated shipping fee */}
+                <span>{formatPrice(shippingFee)}</span>
               </div>
               <div className="order-summary-row total-row">
                 <span>Tổng tiền:</span>
                 <span>{formatPrice(finalTotal)}</span>
               </div>
               <button
-                onClick={handleCheckout} // Call the new function
+                onClick={handleCheckout}
                 className="checkout-btn-right"
-                disabled={isCheckoutDisabled} // Apply the disabled state here
+                disabled={isCheckoutDisabled}
               >
                 ĐẶT HÀNG
               </button>

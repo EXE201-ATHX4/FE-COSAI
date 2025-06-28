@@ -17,6 +17,7 @@ import Account from "../views/Account/Account";
 import PaymentSuccess from "../views/Payment/PaymentSuccess";
 import PaymentFailure from "../views/Payment/PaymentFailure";
 import NotFound from "../views/NotFound/NotFound";
+import HealthQuiz from "../views/HealthQuiz/HealthQuiz";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -39,6 +40,7 @@ const AnimatedRoutes = () => {
       <Route path="/account" element={<Account />} />
       <Route path="/order/:idOrder/paymentSuccess" element={<PaymentSuccess />} />
       <Route path="/order/:idOrder/paymentFailure" element={<PaymentFailure />} />
+      <Route path="/cosai/healthQuiz" element={<HealthQuiz/>}/>
       <Route path="*" element={<NotFound />} /> {/* Thêm dòng này */}
 
     </Routes>

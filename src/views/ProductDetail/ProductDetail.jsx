@@ -35,6 +35,7 @@ import ProductImageGallery from "./ProductImageGallery";
 import { products } from "../ListProduct/data/products";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
+import Chatbox from "../Cosai/ChatBox";
 
 function ProductDetailPage() {
   const { id } = useParams();
@@ -904,7 +905,7 @@ function ProductDetailPage() {
           Đã thêm sản phẩm vào giỏ hàng thành công!
         </Alert>
       </Snackbar>
-
+          <Chatbox/>
       <Footer />
     </Box>
   );
