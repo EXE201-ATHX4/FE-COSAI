@@ -190,13 +190,13 @@ const PaymentSuccess = () => {
                 </p>
                 
                 <div className="contact-links">
-                  <a href="mailto:support@cosai.vn" className="contact-link">
+                  <a href="mailto:cosai.exe.contact@gmail.com" className="contact-link">
                     <Mail className="link-icon" />
-                    support@cosai.vn
+                    cosai.exe.contact@gmail.com
                   </a>
-                  <a href="tel:1900-XXX-XXX" className="contact-link">
+                  <a href="tel:0338554925" className="contact-link">
                     <Phone className="link-icon" />
-                    1900-XXX-XXX
+                    0338554925
                   </a>
                 </div>
               </div>
