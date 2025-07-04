@@ -549,7 +549,7 @@ const Cart = () => {
               </div>
               <div className="order-summary-row">
                 <span>Phí vận chuyển:</span>
-                <span>{formatPrice(shippingFee)}</span>
+                <span>0</span>
               </div>
               <div className="order-summary-row total-row">
                 <span>Tổng tiền:</span>
