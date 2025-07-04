@@ -17,6 +17,7 @@ import {
   FormControl,
   FormLabel,
 } from "@mui/material";
+import BotKhuMui from "../../assets/Sản phẩm/Bot_khu_mui.png";
 
 const CancelOrder = () => {
   const [selectedReason, setSelectedReason] = useState("");
@@ -24,14 +25,14 @@ const CancelOrder = () => {
 
   const orderInfo = {
     id: "#103DDEA",
-    date: "10/03/2025",
+    date: "04/07/2025",
     status: "Đang xử lý",
     statusColor: "warning",
     items: [
       {
         name: "Bột khử mùi Thiên nhiên",
         quantity: 1,
-        image: "/placeholder.svg?height=60&width=60",
+        image: BotKhuMui,
       },
     ],
     total: "130.000 đ",
