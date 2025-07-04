@@ -17,14 +17,15 @@ import CoMem from "../../../assets/Brand/CoMem.png";
 import Sukin from "../../../assets/Brand/Sukin.png";
 import ThoRaKao from "../../../assets/Brand/ThoRaKao.png";
 import AROMATICA from "../../../assets/Brand/AROMATICA.png";
+
 export const products = [
   {
     id: "1",
-    name: "Sữa Dưỡng Thể Khuynh Diếp & Bạc Hà",
+    name: "Sữa Dưỡng Thể Khuynh Diệp & Bạc Hà",
     brand: "Cocoon",
     category: "Dưỡng thể",
-    price: 125000,
-    salePrice: 95000,
+    price: 95000, // Giá bán hiện tại (đã là số)
+    originalPrice: 125000, // Giá gốc (đã là số)
     salePercent: 10,
     rating: 5,
     reviewCount: 111,
@@ -66,20 +67,18 @@ export const products = [
       scent: "Mùi tinh khuynh diệp & Bạc Hà thanh mát, thư giãn",
       note: "Tránh dùng vùng mắt, chỉ dùng ngoài da",
     },
-    images: [ChongNang, ChongNang, ChongNang],
-    sale: "10%",
-    originalPrice: "125.000 đ",
-    price: "95.000 đ",
+    images: ["https://image.cocoonvietnam.com/uploads/Artboard_21_9d91f1cce4.jpg", "https://image.cocoonvietnam.com/uploads/slide_2_b39f5b604c.jpg", "https://image.cocoonvietnam.com/uploads/29892137_slide_2_7bad17f974.jpg"],
     brandImage: Cocoon,
-    image: ChongNang,
+    image: "https://image.cocoonvietnam.com/uploads/Artboard_21_9d91f1cce4.jpg",
+    promotions: ["Free Shipping"],
   },
   {
     id: "2",
     name: "Tẩy Tế Bào Chết Cà Phê Đắk Lắk",
     brand: "Cocoon",
     category: "Tẩy tế bào chết",
-    price: 165000,
-    salePrice: 145000,
+    price: 145000, // Giá bán hiện tại (đã là số)
+    originalPrice: 165000, // Giá gốc (đã là số)
     salePercent: 10,
     rating: 4.5,
     reviewCount: 47,
@@ -105,10 +104,7 @@ export const products = [
       scent: "Mùi cà phê đắng nhẹ, thơm nồng",
       note: "Sử dụng 2-3 lần/tuần, không dùng cho da đang bị tổn thương",
     },
-    images: [TayTBC, ChongNang, TayTBC],
-    sale: "10%",
-    originalPrice: "165.000 đ",
-    price: "145.000 đ",
+    images: ["https://image.cocoonvietnam.com/uploads/26fb6ffcb3c3709d29d2_436613e656.jpg", 'https://image.cocoonvietnam.com/uploads/slide_2_f7524fc1ef.jpg', 'https://image.cocoonvietnam.com/uploads/29892144_slide_2_a241a3841e.jpg'],
     brandImage: CoMem,
     image: TayTBC,
   },
@@ -117,8 +113,8 @@ export const products = [
     name: "Gel Tẩm Khuynh Diệp",
     brand: "Cocoon",
     category: "Dưỡng da",
-    price: 245000,
-    salePrice: 220000,
+    price: 220000, // Giá bán hiện tại (đã là số)
+    originalPrice: 245000, // Giá gốc (đã là số)
     salePercent: 10,
     rating: 4.7,
     reviewCount: 103,
@@ -142,20 +138,19 @@ export const products = [
       scent: "Mùi khuynh diệp tươi mát, thơm nhẹ",
       note: "Có thể sử dụng hàng ngày, tránh tiếp xúc với mắt",
     },
-    images: [GelTam, ChongNang, GelTam],
-    sale: "10%",
-    originalPrice: "245.000 đ",
-    price: "220.000 đ",
-    brandImage: Sukin,
+    images: ["https://image.cocoonvietnam.com/uploads/z4487535386831_5d2ae0d784dfe2e5188ff800f823607b_6e19452e83.jpg", "https://image.cocoonvietnam.com/uploads/slide_2_ea2a3993e0.jpg", "https://image.cocoonvietnam.com/uploads/web_62d54dfa49.jpg"],
+    brandImage: Cocoon,
     image: GelTam,
+    promotions: ["Free Shipping"],
   },
   {
     id: "4",
     name: "Bột Khử Mùi Điền Thanh",
-    brand: "Cocoon",
+    brand: "Comem",
     category: "Mặt nạ",
-    price: 115000,
-    salePrice: null,
+    price: 115000, // Giá hiện tại (đã là số). Nếu không có sale, price = originalPrice
+    originalPrice: 115000, // Giá gốc (đã là số)
+    salePrice: null, // Giữ lại salePrice nếu cần biết giá đã giảm, nhưng không dùng để lọc
     salePercent: null,
     rating: 4.6,
     reviewCount: 73,
@@ -184,20 +179,17 @@ export const products = [
       scent: "Mùi thảo mộc nhẹ nhàng, tự nhiên",
       note: "Sử dụng 1-2 lần/tuần, tránh vùng mắt và môi",
     },
-    images: [BotKhuMui, ChongNang, BotKhuMui],
-    sale: "",
-    originalPrice: "000.000 đ",
-    price: "115.000 đ",
-    brandImage: ThoRaKao,
+    images: ["https://media.comem.vn/uploads/2024/07/srm_tram_tra_(10)_sp2x.webp", "https://media.comem.vn/uploads/January2023/the-chat-bot-khu-mui-wingsup_sp2x.webp", "https://media.comem.vn/uploads/May2022/thanh-phan-thuoc-khu-mui-co-mem_55_sp2x.webp"],
+    brandImage: CoMem,
     image: BotKhuMui,
   },
   {
     id: "5",
-    name: "Mặt Nạ Cấp Ẩm Cho Da",
-    brand: "Cocoon",
+    name: "Mặt Nạ Cấp Ẩm Căng Mịn Da Hydrating Facial Masque",
+    brand: "Sukin",
     category: "Mặt nạ",
-    price: 95000,
-    salePrice: 85000,
+    price: 85000, // Giá bán hiện tại (đã là số)
+    originalPrice: 95000, // Giá gốc (đã là số)
     salePercent: 10,
     rating: 4.9,
     reviewCount: 213,
@@ -222,20 +214,18 @@ export const products = [
       scent: "Không mùi, phù hợp cho da nhạy cảm",
       note: "Sử dụng 2-3 lần/tuần, có thể để qua đêm như mặt nạ ngủ",
     },
-    images: [CapAm, ChongNang, CapAm],
-    sale: "10%",
-    originalPrice: "95.000 đ",
-    price: "85.000 đ",
+    images: ["https://bizweb.dktcdn.net/100/374/252/products/matnaduongamsangmindasukinhydr-c00a3d07-1b63-474a-bf2f-e18d3758020c.jpg?v=1708955489543", "https://bizweb.dktcdn.net/thumb/grande/100/374/252/products/matnaduongamsangmindasukinhydr-ce44ac15-11cd-4e3d-84c8-78209b69af56.jpg?v=1708955489543", "https://salt.tikicdn.com/cache/w300/media/catalog/producttmp/84/90/7a/8687ad4b88448d061a58e584b4e74650.jpg"],
     brandImage: Sukin,
     image: CapAm,
+    promotions: ["Free Shipping"],
   },
   {
     id: "6",
     name: "Kem Nghệ Sáng Da, Ngừa Mụn",
-    brand: "Cocoon",
+    brand: "Thorakao",
     category: "Kem dưỡng",
-    price: 185000,
-    salePrice: 165000,
+    price: 165000, // Giá bán hiện tại (đã là số)
+    originalPrice: 185000, // Giá gốc (đã là số)
     salePercent: 10,
     rating: 4.5,
     reviewCount: 95,
@@ -259,19 +249,18 @@ export const products = [
       scent: "Mùi nghệ nhẹ, thơm tự nhiên",
       note: "Sử dụng buổi tối, tránh tiếp xúc với ánh nắng trực tiếp sau khi sử dụng",
     },
-    images: [KemNghe, ChongNang, KemNghe],
-    sale: "10%",
-    originalPrice: "185.000 đ",
-    price: "165.000 đ",
-    brandImage: Cocoon,
+    images: ["https://thorakao.com/wp-content/uploads/2024/11/164.png", "https://thorakao.com/wp-content/uploads/2024/10/166.png", "https://thorakao.com/wp-content/uploads/2024/10/167.png"],
+    brandImage: ThoRaKao,
     image: KemNghe,
+    promotions: ["Free Shipping"],
   },
   {
     id: "7",
     name: "Serum Cấp Ẩm Phục Hồi Da Thâm",
     brand: "Cocoon",
     category: "Serum",
-    price: 245000,
+    price: 245000, // Giá hiện tại (đã là số)
+    originalPrice: 245000, // Giá gốc (đã là số)
     salePrice: null,
     salePercent: null,
     rating: 4.8,
@@ -298,19 +287,17 @@ export const products = [
       note: "Sử dụng sau bước toner, trước kem dưỡng",
     },
     images: [SerumCapAm, ChongNang, SerumCapAm],
-    sale: "",
-    originalPrice: "000.000 đ",
-    price: "245.000 đ",
     brandImage: CoMem,
     image: SerumCapAm,
+    promotions: ["Free Shipping"],
   },
   {
     id: "8",
     name: "Mặt Nạ Chăm Sóc Đặc Biệt Dưỡng Ẩm",
     brand: "Sukin",
     category: "Mặt nạ",
-    price: 210000,
-    salePrice: 189000,
+    price: 189000, // Giá bán hiện tại (đã là số)
+    originalPrice: 210000, // Giá gốc (đã là số)
     salePercent: 10,
     rating: 4.7,
     reviewCount: 85,
@@ -345,20 +332,19 @@ export const products = [
       note: "Sử dụng 1-2 lần/tuần, có thể kết hợp với máy xông hơi để tăng hiệu quả",
     },
     images: [RauMa, ChongNang, RauMa],
-    sale: "10%",
-    originalPrice: "210.000 đ",
-    price: "189.000 đ",
     brandImage: AROMATICA,
     image: RauMa,
+    promotions: ["Free Shipping"],
   },
   {
     id: "9",
     name: "Serum Cấp Ẩm Phục Hồi Tơ Tằm",
     brand: "Cỏ mềm",
     category: "Serum",
-    price: 245000,
+    price: 245000, // Giá hiện tại (đã là số)
+    originalPrice: 245000, // Giá gốc (đã là số)
     salePrice: null,
-    salePercent: null,
+    salePercent: null, // Thay vì "30%" là chuỗi, hãy tính toán salePercent dựa trên giá số
     rating: 5,
     reviewCount: 2,
     volume: "30ml",
@@ -383,18 +369,17 @@ export const products = [
       note: "Sử dụng trước kem dưỡng, có thể kết hợp với các sản phẩm cùng dòng để tăng hiệu quả",
     },
     images: [SerumCapAm, ChongNang, SerumCapAm],
-    sale: "30%",
-    originalPrice: "000.000 đ",
-    price: "245.000 đ",
     brandImage: Cocoon,
     image: SerumCapAm,
+    promotions: ["Free Shipping"],
   },
   {
     id: "10",
     name: "Serum Ngăn rụng tóc Bưởi",
     brand: "R&B",
     category: "Chăm sóc tóc",
-    price: 272000,
+    price: 272000, // Giá hiện tại (đã là số)
+    originalPrice: 272000, // Giá gốc (đã là số)
     salePrice: null,
     salePercent: null,
     rating: 4,
@@ -420,18 +405,17 @@ export const products = [
       note: "Sử dụng hàng ngày, tốt nhất là sau khi gội đầu khi tóc còn ẩm",
     },
     images: [RungToc, ChongNang, RungToc],
-    sale: "",
-    originalPrice: "000.000 đ",
-    price: "272.000 đ",
     brandImage: Sukin,
     image: RungToc,
+    promotions: ["Free Shipping"],
   },
   {
     id: "11",
     name: "Lotion Dưỡng Tóc Tinh Dầu Bưởi",
     brand: "R&B",
     category: "Chăm sóc tóc",
-    price: 227000,
+    price: 227000, // Giá hiện tại (đã là số)
+    originalPrice: 227000, // Giá gốc (đã là số)
     salePrice: null,
     salePercent: null,
     rating: 5,
@@ -457,19 +441,17 @@ export const products = [
       note: "Có thể sử dụng hàng ngày, không cần xả lại",
     },
     images: [LotionToc, ChongNang, LotionToc],
-    sale: "",
-    originalPrice: "000.000 đ",
-    price: "227.000 đ",
     brandImage: ThoRaKao,
     image: LotionToc,
+    promotions: ["Free Shipping"],
   },
   {
     id: "12",
     name: "Muối Tẩy Tế Bào Chết Da Đầu",
     brand: "AROMATICA",
     category: "Chăm sóc tóc",
-    price: 468000,
-    salePrice: 258000,
+    price: 258000, // Giá bán hiện tại (đã là số)
+    originalPrice: 468000, // Giá gốc (đã là số)
     salePercent: 45,
     rating: 5,
     reviewCount: 11,
@@ -495,11 +477,9 @@ export const products = [
       note: "Sử dụng 1-2 lần/tuần, trước khi gội đầu",
     },
     images: [MuoiTayTBC, ChongNang, MuoiTayTBC],
-    sale: "45%",
-    originalPrice: "468.000 đ",
-    price: "258.000 đ",
     brandImage: AROMATICA,
     image: MuoiTayTBC,
+    promotions: ["Free Shipping"],
   },
 ];
 
@@ -512,9 +492,29 @@ export const categories = [
 ];
 
 // Tạo các khoảng giá
+// Lưu ý: Giá trị max của khoảng cuối cùng nên là Number.POSITIVE_INFINITY để bao gồm tất cả các sản phẩm giá cao.
 export const priceRanges = [
-  { id: 1, label: "Dưới 100.000đ", min: 0, max: 100000 },
-  { id: 2, label: "100.000đ - 200.000đ", min: 100000, max: 200000 },
-  { id: 3, label: "200.000đ - 300.000đ", min: 200000, max: 300000 },
+  { id: 1, label: "Dưới 100.000đ", min: 0, max: 99999 }, // Điều chỉnh max cho rõ ràng
+  { id: 2, label: "100.000đ - 200.000đ", min: 100000, max: 199999 },
+  { id: 3, label: "200.000đ - 300.000đ", min: 200000, max: 299999 },
   { id: 4, label: "Trên 300.000đ", min: 300000, max: Number.POSITIVE_INFINITY },
+];
+
+export const promotions = [
+  { id: 1, name: "New Arrivals" },
+  { id: 2, name: "Best Sellers" },
+  { id: 3, name: "Free Shipping" },
+  { id: 4, name: "Special Discount" },
+  { id: 5, name: "Limited Offer" },
+  { id: 6, name: "Clearance Sale" },
+];
+
+export const skinTypes = [
+  "Normal",
+  "Oily",
+  "Dry",
+  "Combination",
+  "Sensitive",
+  "Acne-prone",
+  "All"
 ];
