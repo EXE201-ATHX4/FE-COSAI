@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link as RouterLink } from "react-router-dom";
+import { useParams, Link as RouterLink, useNavigate } from "react-router-dom";
 import {
   Container,
   Box,
@@ -43,6 +43,7 @@ function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const navigate = useNavigate(); // Hook for navigation
 
   useEffect(() => {
     if (id) {
@@ -119,10 +120,15 @@ function ProductDetailPage() {
     // Thêm vào giỏ hàng trước
     addToCart();
 
-    // Chuyển hướng đến trang thanh toán (có thể tùy chỉnh)
-    setTimeout(() => {
-      window.location.href = "/checkout";
-    }, 500);
+
+    const accessToken = localStorage.getItem("accessToken")
+    const refreshToken = localStorage.getItem("refreshToken")
+    if (!accessToken && !refreshToken) {
+      navigate("/login");
+    }else{
+      navigate("/cart")
+    }
+    
   };
 
   // Hàm đóng thông báo

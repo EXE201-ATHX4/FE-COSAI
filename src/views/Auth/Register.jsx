@@ -8,7 +8,7 @@ import "./ConfirmationDialog.css";
 import ConfirmationDialog from "./ConfirmationDialog";
 
 const Register = () => {
-  const [activeTab, setActiveTab] = useState("phone");
+  const [activeTab, setActiveTab] = useState("email");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -109,7 +109,7 @@ const Register = () => {
         <div className="form-container">
           <h2 className="form-title">ĐĂNG KÝ</h2>
           <form onSubmit={handleSubmit}>
-            <div className="tab-container">
+            {/* <div className="tab-container">
               <button
                 type="button"
                 className={`tab-button ${activeTab === "phone" ? "active" : ""}`}
@@ -124,7 +124,7 @@ const Register = () => {
               >
                 Email
               </button>
-            </div>
+            </div> */}
 
             <div className="form-input-group">
               <input
