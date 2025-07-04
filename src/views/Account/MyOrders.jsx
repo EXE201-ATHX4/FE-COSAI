@@ -14,6 +14,9 @@ import {
 } from "@mui/material";
 import CancelOrderForm from "./CancelOrderForm";
 import OrderDetailView from "./OrderDetailView";
+import BotKhuMui from "../../assets/Sản phẩm/Bot_khu_mui.png";
+
+import ChongNang from "../../assets/Sản phẩm/sua_chong_nang.png";
 
 const MyOrders = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -23,61 +26,65 @@ const MyOrders = () => {
   const orders = [
     {
       id: "#103DDEA",
-      date: "10/03/2025",
+      date: "04/07/2025",
       status: "Đang xử lý",
       statusColor: "warning",
       items: [
         {
           name: "Bột khử mùi Thiên nhiên",
           quantity: 1,
-          image: "/placeholder.svg?height=60&width=60",
+          image: BotKhuMui,
         },
       ],
       total: "130.000 đ",
     },
     {
       id: "#123ABCC",
-      date: "08/03/2025",
+      date: "02/07/2025",
       status: "Đang giao",
       statusColor: "info",
       items: [
         {
-          name: "Sữa chống nắng Bi đao",
+          name: "Gel rửa mặt Bi đao",
           quantity: 1,
-          image: "/placeholder.svg?height=60&width=60",
+          image:
+            "https://image.cocoonvietnam.com/uploads/z3526520930085_8478409d6ac4058a7b77514ce71bdada_d14a16f231.jpg",
         },
         {
           name: "Tẩy da chết Cà phê Đắk Lắk",
           quantity: 1,
-          image: "/placeholder.svg?height=60&width=60",
+          image:
+            "https://image.cocoonvietnam.com/uploads/26fb6ffcb3c3709d29d2_436613e656.jpg",
         },
       ],
       total: "200.000 đ",
     },
     {
       id: "#345CCBA",
-      date: "01/02/2025",
+      date: "30/06/2025",
       status: "Đã hủy",
       statusColor: "error",
       items: [
         {
           name: "Gel tắm Khuynh Diệp",
           quantity: 1,
-          image: "/placeholder.svg?height=60&width=60",
+          image:
+            "https://image.cocoonvietnam.com/uploads/z4487535386831_5d2ae0d784dfe2e5188ff800f823607b_6e19452e83.jpg",
         },
       ],
       total: "230.000 đ",
     },
     {
       id: "#456AABB",
-      date: "28/06/2024",
+      date: "28/06/2025",
       status: "Đã giao",
       statusColor: "success",
       items: [
         {
           name: "Muối tắm Cà phê Cốt dừa",
           quantity: 1,
-          image: "/placeholder.svg?height=60&width=60",
+          image:
+            "https://media.comem.vn/uploads/November2022/muoi-tam-ca-phe.webp",
         },
       ],
       total: "110.000 đ",

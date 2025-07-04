@@ -53,31 +53,31 @@ const AccountInfo = () => {
   const orders = [
     {
       id: "#123DFGH",
-      date: "28/06/2025",
+      date: "04/07/2025",
       amount: "250.000 đ",
       status: "Đang xử lý",
     },
     {
       id: "#123ABCC",
-      date: "08/03/2025",
+      date: "01/07/2025",
       amount: "200.000 đ",
       status: "Đang giao",
     },
     {
       id: "#345CCBA",
-      date: "01/02/2025",
+      date: "30/06/2025",
       amount: "230.000 đ",
       status: "Đã hủy",
     },
     {
       id: "#456AABB",
-      date: "28/06/2024",
+      date: "28/06/2025",
       amount: "110.000 đ",
       status: "Đã giao",
     },
     {
       id: "#789DDCC",
-      date: "15/09/2023",
+      date: "28/06/2025",
       amount: "150.000 đ",
       status: "Đã hủy",
     },
