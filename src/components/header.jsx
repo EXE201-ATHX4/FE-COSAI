@@ -237,7 +237,7 @@ export const Header = () => {
               {/* Menu Item displaying user name (optional: make clickable for profile) */}
               <MenuItem onClick={handleProfileClick}>
                 <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-                  {userName}
+                  Tài khoản
                 </Typography>
               </MenuItem>
               {/* Menu Item for Logout */}
