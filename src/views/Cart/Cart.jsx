@@ -553,7 +553,7 @@ const Cart = () => {
               </div>
               <div className="order-summary-row total-row">
                 <span>Tổng tiền:</span>
-                <span>{formatPrice(finalTotal)}</span>
+                <span>{formatPrice(subtotal)}</span>
               </div>
               <button
                 onClick={handleCheckout}
