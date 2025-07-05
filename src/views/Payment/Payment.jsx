@@ -211,11 +211,11 @@ const Payment = () => {
             </div>
             <div className="summary-row">
               <span>Phí vận chuyển:</span>
-              <span>{formatPrice(orderSummary.shippingFee)}</span>
+              <span>0</span>
             </div>
             <div className="summary-row total-row">
               <span>Tổng tiền:</span>
-              <span>{formatPrice(orderSummary.finalTotal)}</span>
+              <span>{formatPrice(orderSummary.subtotal)}</span>
             </div>
           </div>
 
