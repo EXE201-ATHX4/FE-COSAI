@@ -82,11 +82,10 @@ const Sidebar = () => {
               lineHeight: 1.3,
             }}
           >
-            🌿 Quản Lý Mỹ Phẩm
+            
+            Quản Lý 
             <br />
-            <span style={{ fontSize: "0.9rem", fontWeight: "normal" }}>
-              Thuần Chay
-            </span>
+            
           </Typography>
         </Box>
       </Toolbar>
