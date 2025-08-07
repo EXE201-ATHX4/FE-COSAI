@@ -51,13 +51,14 @@ const Login = () => {
           }
         );
 
-        const { accessToken, refreshToken } = response.data;
+        const { accessToken, refreshToken, role } = response.data; // Giả định role có trong response
         if (accessToken && refreshToken) {
           localStorage.setItem("isLoggedIn", "true");
           localStorage.setItem("userEmail", phoneEmail);
           localStorage.setItem("userName", "Gia Hưng");
           localStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
+          localStorage.setItem("role", role || "Customer"); 
           setShowLoginSuccessDialog(true);
         }
       } catch (error) {
@@ -72,7 +73,12 @@ const Login = () => {
 
   const handleLoginSuccessConfirm = () => {
     setShowLoginSuccessDialog(false);
-    navigate("/"); // Navigate to home page after successful login
+    const userRole = localStorage.getItem("role");
+    if (userRole === "Admin") {
+      navigate("/admin/products"); // Chuyển hướng đến trang admin nếu là Admin
+    } else {
+      navigate("/"); // Chuyển hướng về trang chính nếu không phải Admin
+    }
   };
 
   return (
@@ -162,7 +168,7 @@ const Login = () => {
         open={showLoginSuccessDialog}
         icon="success"
         title="Đăng nhập thành công!"
-        message="Chào mừng bạn quay trở lại! Đang chuyển hướng về trang chủ."
+        message="Chào mừng bạn quay trở lại! Đang chuyển hướng..."
         primaryButtonText="Tiếp tục"
         onPrimaryButtonClick={handleLoginSuccessConfirm}
         onClose={handleLoginSuccessConfirm}
