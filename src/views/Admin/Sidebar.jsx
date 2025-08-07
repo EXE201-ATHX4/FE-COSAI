@@ -19,21 +19,17 @@ import PeopleIcon from "@mui/icons-material/People";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const Sidebar = ({ setIsLoggedIn, setUserName, handleAccountMenuClose }) => {
+const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   // Handler for the "Đăng xuất" (Logout) action
   const handleLogout = () => {
     // In a real application, this is where you'd clear user session/token
-    console.log("Đang đăng xuất...");
+    console.log("Đang đăng xuất..."); 
     localStorage.removeItem("isLoggedIn"); // Remove login status from localStorage
-    localStorage.removeItem("userName"); // Remove user name from localStorage
-    setIsLoggedIn(false); // Update state
-    setUserName(""); // Clear user name in state
-    if (handleAccountMenuClose) {
-      handleAccountMenuClose(); // Close the menu after logout action (if provided)
-    }
+    localStorage.removeItem("userName"); // Remove user name fr       om localStorage
+    
     navigate("/login"); // Navigate to the login page
   };
 
