@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -27,8 +27,8 @@ import {
   Switch,
   FormControlLabel,
   Divider,
-  Avatar
-} from '@mui/material';
+  Avatar,
+} from "@mui/material";
 import {
   Search as SearchIcon,
   Add as AddIcon,
@@ -40,11 +40,22 @@ import {
   TrendingUp as TrendingUpIcon,
   Inventory as InventoryIcon,
   AttachMoney as MoneyIcon,
-  Category as CategoryIcon
-} from '@mui/icons-material';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import productService from '../../service/product';
+  Category as CategoryIcon,
+} from "@mui/icons-material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+import productService from "../../service/product";
 
 const Products = () => {
   // State cho dữ liệu
@@ -61,12 +72,12 @@ const Products = () => {
   const [pageSize, setPageSize] = useState(10);
 
   // State cho lọc và tìm kiếm
-  const [searchTerm, setSearchTerm] = useState('');
-  const [priceFilter, setPriceFilter] = useState('all');
-  const [stockFilter, setStockFilter] = useState('all');
-  const [saleFilter, setSaleFilter] = useState('all');
-  const [sortBy, setSortBy] = useState('name');
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [priceFilter, setPriceFilter] = useState("all");
+  const [stockFilter, setStockFilter] = useState("all");
+  const [saleFilter, setSaleFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   // State cho dialog
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -77,27 +88,27 @@ const Products = () => {
 
   // State cho form
   const [newProduct, setNewProduct] = useState({
-    name: '',
-    sku: '',
+    name: "",
+    sku: "",
     originalPrice: 0,
     salePrice: null,
     quantity: 0,
     isOnSale: false,
-    description: '',
-    shortDescription: '',
-    ingredients: '',
-    usage: '',
-    brandName: '',
-    categoryName: '',
-    supplierName: '',
-    productImages: []
+    description: "",
+    shortDescription: "",
+    ingredients: "",
+    usage: "",
+    brandName: "",
+    categoryName: "",
+    supplierName: "",
+    productImages: [],
   });
 
   // State cho thông báo
   const [snackbar, setSnackbar] = useState({
     open: false,
-    message: '',
-    severity: 'success'
+    message: "",
+    severity: "success",
   });
 
   // Fetch products với phân trang
@@ -112,15 +123,15 @@ const Products = () => {
 
       // Tính toán minPrice và maxPrice
       const prices = data.data.items
-        .map(p => p.originalPrice || 0)
-        .filter(p => p > 0);
-      
+        .map((p) => p.originalPrice || 0)
+        .filter((p) => p > 0);
+
       if (prices.length > 0) {
         setMinPrice(Math.min(...prices));
         setMaxPrice(Math.max(...prices));
       }
     } catch (error) {
-      showSnackbar(error.message, 'error');
+      showSnackbar(error.message, "error");
     } finally {
       setLoading(false);
     }
@@ -136,50 +147,55 @@ const Products = () => {
 
     // Tìm kiếm theo tên
     if (searchTerm) {
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.brandName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.categoryName.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.brandName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.categoryName.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     // Lọc theo giá
-    if (priceFilter !== 'all') {
+    if (priceFilter !== "all") {
       switch (priceFilter) {
-        case 'under-500k':
-          filtered = filtered.filter(p => p.originalPrice < 500000);
+        case "under-500k":
+          filtered = filtered.filter((p) => p.originalPrice < 500000);
           break;
-        case '500k-1m':
-          filtered = filtered.filter(p => p.originalPrice >= 500000 && p.originalPrice < 1000000);
+        case "500k-1m":
+          filtered = filtered.filter(
+            (p) => p.originalPrice >= 500000 && p.originalPrice < 1000000
+          );
           break;
-        case '1m-2m':
-          filtered = filtered.filter(p => p.originalPrice >= 1000000 && p.originalPrice < 2000000);
+        case "1m-2m":
+          filtered = filtered.filter(
+            (p) => p.originalPrice >= 1000000 && p.originalPrice < 2000000
+          );
           break;
-        case 'over-2m':
-          filtered = filtered.filter(p => p.originalPrice >= 2000000);
+        case "over-2m":
+          filtered = filtered.filter((p) => p.originalPrice >= 2000000);
           break;
       }
     }
 
     // Lọc theo tồn kho
-    if (stockFilter !== 'all') {
+    if (stockFilter !== "all") {
       switch (stockFilter) {
-        case 'in-stock':
-          filtered = filtered.filter(p => p.quantity > 0);
+        case "in-stock":
+          filtered = filtered.filter((p) => p.quantity > 0);
           break;
-        case 'out-of-stock':
-          filtered = filtered.filter(p => p.quantity === 0);
+        case "out-of-stock":
+          filtered = filtered.filter((p) => p.quantity === 0);
           break;
-        case 'low-stock':
-          filtered = filtered.filter(p => p.quantity > 0 && p.quantity < 10);
+        case "low-stock":
+          filtered = filtered.filter((p) => p.quantity > 0 && p.quantity < 10);
           break;
       }
     }
 
     // Lọc theo khuyến mãi
-    if (saleFilter !== 'all') {
-      filtered = filtered.filter(p => 
-        saleFilter === 'on-sale' ? p.isOnSale : !p.isOnSale
+    if (saleFilter !== "all") {
+      filtered = filtered.filter((p) =>
+        saleFilter === "on-sale" ? p.isOnSale : !p.isOnSale
       );
     }
 
@@ -188,42 +204,54 @@ const Products = () => {
       const aValue = a[sortBy];
       const bValue = b[sortBy];
       const comparison = aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-      return sortOrder === 'asc' ? comparison : -comparison;
+      return sortOrder === "asc" ? comparison : -comparison;
     });
 
     setFilteredProducts(filtered);
-  }, [products, searchTerm, priceFilter, stockFilter, saleFilter, sortBy, sortOrder]);
+  }, [
+    products,
+    searchTerm,
+    priceFilter,
+    stockFilter,
+    saleFilter,
+    sortBy,
+    sortOrder,
+  ]);
 
   // Hiển thị thông báo
-  const showSnackbar = (message, severity = 'success') => {
+  const showSnackbar = (message, severity = "success") => {
     setSnackbar({ open: true, message, severity });
   };
 
   // Chuẩn bị dữ liệu cho biểu đồ
   const getPriceRangeData = () => {
     const ranges = [
-      { range: '< 500K', min: 0, max: 500000, color: '#8884d8' },
-      { range: '500K - 1M', min: 500000, max: 1000000, color: '#82ca9d' },
-      { range: '1M - 2M', min: 1000000, max: 2000000, color: '#ffc658' },
-      { range: '> 2M', min: 2000000, max: Infinity, color: '#ff7300' }
+      { range: "< 500K", min: 0, max: 500000, color: "#8884d8" },
+      { range: "500K - 1M", min: 500000, max: 1000000, color: "#82ca9d" },
+      { range: "1M - 2M", min: 1000000, max: 2000000, color: "#ffc658" },
+      { range: "> 2M", min: 2000000, max: Infinity, color: "#ff7300" },
     ];
 
-    return ranges.map(range => ({
+    return ranges.map((range) => ({
       range: range.range,
-      count: products.filter(p => p.originalPrice >= range.min && p.originalPrice < range.max).length,
-      color: range.color
+      count: products.filter(
+        (p) => p.originalPrice >= range.min && p.originalPrice < range.max
+      ).length,
+      color: range.color,
     }));
   };
 
   const getStockData = () => {
-    const inStock = products.filter(p => p.quantity > 10).length;
-    const lowStock = products.filter(p => p.quantity > 0 && p.quantity <= 10).length;
-    const outOfStock = products.filter(p => p.quantity === 0).length;
+    const inStock = products.filter((p) => p.quantity > 10).length;
+    const lowStock = products.filter(
+      (p) => p.quantity > 0 && p.quantity <= 10
+    ).length;
+    const outOfStock = products.filter((p) => p.quantity === 0).length;
 
     return [
-      { name: 'Còn hàng', value: inStock, color: '#4caf50' },
-      { name: 'Sắp hết', value: lowStock, color: '#ff9800' },
-      { name: 'Hết hàng', value: outOfStock, color: '#f44336' }
+      { name: "Còn hàng", value: inStock, color: "#4caf50" },
+      { name: "Sắp hết", value: lowStock, color: "#ff9800" },
+      { name: "Hết hàng", value: outOfStock, color: "#f44336" },
     ];
   };
 
@@ -235,9 +263,9 @@ const Products = () => {
       await fetchProducts(currentPage, pageSize);
       setOpenCreateDialog(false);
       resetNewProduct();
-      showSnackbar('Thêm sản phẩm thành công!');
+      showSnackbar("Thêm sản phẩm thành công!");
     } catch (error) {
-      showSnackbar(error.message, 'error');
+      showSnackbar(error.message, "error");
     } finally {
       setLoading(false);
     }
@@ -250,9 +278,9 @@ const Products = () => {
         await productService.updateProduct(selectedProduct.id, selectedProduct);
         await fetchProducts(currentPage, pageSize);
         setOpenUpdateDialog(false);
-        showSnackbar('Cập nhật sản phẩm thành công!');
+        showSnackbar("Cập nhật sản phẩm thành công!");
       } catch (error) {
-        showSnackbar(error.message, 'error');
+        showSnackbar(error.message, "error");
       } finally {
         setLoading(false);
       }
@@ -266,9 +294,9 @@ const Products = () => {
         await productService.deleteProduct(selectedProduct.id);
         await fetchProducts(currentPage, pageSize);
         setOpenDeleteDialog(false);
-        showSnackbar('Xóa sản phẩm thành công!');
+        showSnackbar("Xóa sản phẩm thành công!");
       } catch (error) {
-        showSnackbar(error.message, 'error');
+        showSnackbar(error.message, "error");
       } finally {
         setLoading(false);
       }
@@ -277,113 +305,155 @@ const Products = () => {
 
   const resetNewProduct = () => {
     setNewProduct({
-      name: '',
-      sku: '',
+      name: "",
+      sku: "",
       originalPrice: 0,
       salePrice: null,
       quantity: 0,
       isOnSale: false,
-      description: '',
-      shortDescription: '',
-      ingredients: '',
-      usage: '',
-      brandName: '',
-      categoryName: '',
-      supplierName: '',
-      productImages: []
+      description: "",
+      shortDescription: "",
+      ingredients: "",
+      usage: "",
+      brandName: "",
+      categoryName: "",
+      supplierName: "",
+      productImages: [],
     });
   };
 
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
     }).format(price);
   };
 
   const getStockStatus = (quantity) => {
-    if (quantity === 0) return { label: 'Hết hàng', color: 'error' };
-    if (quantity < 10) return { label: 'Sắp hết', color: 'warning' };
-    return { label: 'Còn hàng', color: 'success' };
+    if (quantity === 0) return { label: "Hết hàng", color: "error" };
+    if (quantity < 10) return { label: "Sắp hết", color: "warning" };
+    return { label: "Còn hàng", color: "success" };
   };
 
   const columns = [
-    { 
-      field: 'id', 
-      headerName: 'ID', 
+    {
+      field: "id",
+      headerName: "ID",
       width: 70,
-      align: 'center',
-      headerAlign: 'center'
+      align: "center",
+      headerAlign: "center",
     },
     {
-      field: 'name',
-      headerName: 'Tên sản phẩm',
+      field: "name",
+      headerName: "Tên sản phẩm",
       width: 250,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}>
-            {params.value?.charAt(0)?.toUpperCase()}
-          </Avatar>
-          <Box>
-            <Typography variant="body2" fontWeight="medium">
-              {params.value}
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              {params.row.brandName}
-            </Typography>
-          </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <Typography variant="body2" fontWeight="medium">
+            {params.value}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {params.row.brandName}
+          </Typography>
         </Box>
-      )
+      ),
     },
     {
-      field: 'categoryName',
-      headerName: 'Danh mục',
+      field: "categoryName",
+      headerName: "Danh mục",
       width: 150,
       renderCell: (params) => (
         <Chip
-          label={params.value || 'Chưa phân loại'}
+          label={params.value || "Chưa phân loại"}
           size="small"
           variant="outlined"
-          color={params.value ? 'primary' : 'default'}
+          color={params.value ? "primary" : "default"}
         />
-      )
+      ),
     },
     {
-      field: 'originalPrice',
-      headerName: 'Giá gốc',
+      field: "originalPrice",
+      headerName: "Giá gốc",
       width: 120,
-      align: 'right',
-      headerAlign: 'right',
+      align: "right",
+      headerAlign: "right",
       renderCell: (params) => (
-        <Typography variant="body2" fontWeight="medium">
-          {formatPrice(params.value)}
-        </Typography>
-      )
-    },
-    {
-      field: 'salePrice',
-      headerName: 'Giá KM',
-      width: 120,
-      align: 'right',
-      headerAlign: 'right',
-      renderCell: (params) => (
-        params.value ? (
-          <Typography variant="body2" color="error.main" fontWeight="medium">
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <Typography variant="body2" fontWeight="medium">
             {formatPrice(params.value)}
           </Typography>
-        ) : (
-          <Typography variant="body2" color="text.secondary">
-            -
-          </Typography>
-        )
-      )
+        </Box>
+      ),
     },
     {
-      field: 'quantity',
-      headerName: 'Tồn kho',
+      field: "salePrice",
+      headerName: "Giá KM",
       width: 120,
-      align: 'center',
-      headerAlign: 'center',
+      align: "right",
+      headerAlign: "right",
+      renderCell: (params) =>
+        params.value ? (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <Typography variant="body2" color="error.main" fontWeight="medium">
+              {formatPrice(params.value)}
+            </Typography>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <Typography variant="body2" color="text.secondary">
+              -
+            </Typography>
+          </Box>
+        ),
+    },
+    {
+      field: "quantity",
+      headerName: "Tồn kho",
+      width: 120,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => {
         const status = getStockStatus(params.value);
         return (
@@ -394,29 +464,29 @@ const Products = () => {
             variant="outlined"
           />
         );
-      }
+      },
     },
     {
-      field: 'isOnSale',
-      headerName: 'Khuyến mãi',
+      field: "isOnSale",
+      headerName: "Khuyến mãi",
       width: 100,
-      align: 'center',
-      headerAlign: 'center',
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => (
         <Chip
-          label={params.value ? 'Có' : 'Không'}
+          label={params.value ? "Có" : "Không"}
           size="small"
-          color={params.value ? 'success' : 'default'}
-          variant={params.value ? 'filled' : 'outlined'}
+          color={params.value ? "success" : "default"}
+          variant={params.value ? "filled" : "outlined"}
         />
-      )
+      ),
     },
     {
-      field: 'actions',
-      headerName: 'Thao tác',
+      field: "actions",
+      headerName: "Thao tác",
       width: 180,
-      align: 'center',
-      headerAlign: 'center',
+      align: "center",
+      headerAlign: "center",
       sortable: false,
       renderCell: (params) => (
         <Stack direction="row" spacing={1}>
@@ -457,15 +527,31 @@ const Products = () => {
             </IconButton>
           </Tooltip>
         </Stack>
-      )
-    }
+      ),
+    },
   ];
 
   return (
     <Box sx={{ p: 3 }}>
       {/* Header */}
-      <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h4" fontWeight="bold" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'primary.main' }}>
+      <Box
+        sx={{
+          mb: 3,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            color: "primary.main",
+          }}
+        >
           Quản lý Sản phẩm
         </Typography>
         <Stack direction="row" spacing={2}>
@@ -488,11 +574,22 @@ const Products = () => {
       </Box>
 
       {/* Thống kê tổng quan */}
-      <Grid container spacing={3} sx={{ mb: 3, width: '100%' }}>
-        <Grid item xs={12} sm={6} md={3} sx={{ mb: 2 ,width: '20%'}}>
-          <Card sx={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
+      <Grid container spacing={3} sx={{ mb: 3, width: "100%" }}>
+        <Grid item xs={12} sm={6} md={3} sx={{ mb: 2, width: "20%" }}>
+          <Card
+            sx={{
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              color: "white",
+            }}
+          >
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
                 <Box>
                   <Typography variant="h4" fontWeight="bold">
                     {totalProducts}
@@ -506,10 +603,21 @@ const Products = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3} sx={{ mb: 2 ,width: '20%'}}>
-          <Card sx={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: 'white' }}>
+        <Grid item xs={12} sm={6} md={3} sx={{ mb: 2, width: "20%" }}>
+          <Card
+            sx={{
+              background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+              color: "white",
+            }}
+          >
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
                 <Box>
                   <Typography variant="h4" fontWeight="bold">
                     {formatPrice(minPrice)}
@@ -523,10 +631,21 @@ const Products = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}sx={{ mb: 2 ,width: '20%'}}>
-          <Card sx={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', color: 'white' }}>
+        <Grid item xs={12} sm={6} md={3} sx={{ mb: 2, width: "20%" }}>
+          <Card
+            sx={{
+              background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+              color: "white",
+            }}
+          >
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
                 <Box>
                   <Typography variant="h4" fontWeight="bold">
                     {formatPrice(maxPrice)}
@@ -540,13 +659,24 @@ const Products = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3} sx={{ mb: 2 ,width: '20%'}}>
-          <Card sx={{ background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', color: 'white' }}>
+        <Grid item xs={12} sm={6} md={3} sx={{ mb: 2, width: "20%" }}>
+          <Card
+            sx={{
+              background: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+              color: "white",
+            }}
+          >
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
                 <Box>
                   <Typography variant="h4" fontWeight="bold">
-                    {products.filter(p => p.isOnSale).length}
+                    {products.filter((p) => p.isOnSale).length}
                   </Typography>
                   <Typography variant="body2" sx={{ opacity: 0.8 }}>
                     Đang khuyến mãi
@@ -561,7 +691,7 @@ const Products = () => {
 
       {/* Biểu đồ */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={8} sx={{ mb: 2 ,width: '40%'}}>
+        <Grid item xs={12} md={8} sx={{ mb: 2, width: "40%" }}>
           <Paper sx={{ p: 3 }}>
             <Typography variant="h6" gutterBottom fontWeight="bold">
               Phân tán sản phẩm theo mức giá
@@ -578,7 +708,7 @@ const Products = () => {
             </ResponsiveContainer>
           </Paper>
         </Grid>
-        <Grid item xs={12} md={4} sx={{ mb: 2 ,width: '40%'}}>
+        <Grid item xs={12} md={4} sx={{ mb: 2, width: "40%" }}>
           <Paper sx={{ p: 3 }}>
             <Typography variant="h6" gutterBottom fontWeight="bold">
               Tình trạng tồn kho
@@ -608,7 +738,12 @@ const Products = () => {
 
       {/* Bộ lọc và tìm kiếm */}
       <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" gutterBottom fontWeight="bold" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          fontWeight="bold"
+          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+        >
           <FilterIcon /> Bộ lọc và tìm kiếm
         </Typography>
         <Grid container spacing={2} alignItems="center">
@@ -624,11 +759,11 @@ const Products = () => {
                   <InputAdornment position="start">
                     <SearchIcon />
                   </InputAdornment>
-                )
+                ),
               }}
             />
           </Grid>
-          <Grid item xs={12} md={2} sx={{width: '15%'}}>
+          <Grid item xs={12} md={2} sx={{ width: "15%" }}>
             <FormControl fullWidth>
               <InputLabel>Mức giá</InputLabel>
               <Select
@@ -644,7 +779,7 @@ const Products = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={2} sx={{width: '15%'}}>
+          <Grid item xs={12} md={2} sx={{ width: "15%" }}>
             <FormControl fullWidth>
               <InputLabel>Tồn kho</InputLabel>
               <Select
@@ -659,7 +794,7 @@ const Products = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={2} sx={{width: '15%'}}>
+          <Grid item xs={12} md={2} sx={{ width: "15%" }}>
             <FormControl fullWidth>
               <InputLabel>Khuyến mãi</InputLabel>
               <Select
@@ -673,7 +808,7 @@ const Products = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={2} sx={{width: '15%'}}>
+          <Grid item xs={12} md={2} sx={{ width: "15%" }}>
             <FormControl fullWidth>
               <InputLabel>Sắp xếp</InputLabel>
               <Select
@@ -687,12 +822,14 @@ const Products = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={1} sx={{width: '15%'}}>
+          <Grid item xs={12} md={1} sx={{ width: "15%" }}>
             <FormControlLabel
               control={
                 <Switch
-                  checked={sortOrder === 'desc'}
-                  onChange={(e) => setSortOrder(e.target.checked ? 'desc' : 'asc')}
+                  checked={sortOrder === "desc"}
+                  onChange={(e) =>
+                    setSortOrder(e.target.checked ? "desc" : "asc")
+                  }
                 />
               }
               label="Giảm dần"
@@ -703,13 +840,20 @@ const Products = () => {
       </Paper>
 
       {/* Bảng dữ liệu */}
-      <Paper sx={{ p: 3, mb: 2, width: '100%' }} >
-        <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Paper sx={{ p: 3, mb: 2, width: "100%" }}>
+        <Box
+          sx={{
+            mb: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <Typography variant="h6" fontWeight="bold">
             Danh sách sản phẩm ({filteredProducts.length} kết quả)
           </Typography>
         </Box>
-        
+
         <DataGrid
           rows={filteredProducts}
           columns={columns}
@@ -717,26 +861,26 @@ const Products = () => {
           autoHeight
           disableSelectionOnClick
           components={{
-            Toolbar: GridToolbar
+            Toolbar: GridToolbar,
           }}
           componentsProps={{
             toolbar: {
               showQuickFilter: true,
-              quickFilterProps: { debounceMs: 500 }
-            }
+              quickFilterProps: { debounceMs: 500 },
+            },
           }}
           sx={{
-            '& .MuiDataGrid-cell:hover': {
-              backgroundColor: 'action.hover'
+            "& .MuiDataGrid-cell:hover": {
+              backgroundColor: "action.hover",
             },
-            '& .MuiDataGrid-row:hover': {
-              backgroundColor: 'action.hover'
-            }
+            "& .MuiDataGrid-row:hover": {
+              backgroundColor: "action.hover",
+            },
           }}
         />
 
         {/* Phân trang */}
-        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
           <Pagination
             count={totalPages}
             page={currentPage}
@@ -749,8 +893,8 @@ const Products = () => {
       </Paper>
 
       {/* Dialog tạo mới */}
-      <Dialog 
-        open={openCreateDialog} 
+      <Dialog
+        open={openCreateDialog}
         onClose={() => setOpenCreateDialog(false)}
         maxWidth="md"
         fullWidth
@@ -767,7 +911,9 @@ const Products = () => {
                 fullWidth
                 label="Tên sản phẩm *"
                 value={newProduct.name}
-                onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, name: e.target.value })
+                }
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -775,7 +921,9 @@ const Products = () => {
                 fullWidth
                 label="SKU"
                 value={newProduct.sku}
-                onChange={(e) => setNewProduct({ ...newProduct, sku: e.target.value })}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, sku: e.target.value })
+                }
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -784,7 +932,12 @@ const Products = () => {
                 label="Giá gốc *"
                 type="number"
                 value={newProduct.originalPrice}
-                onChange={(e) => setNewProduct({ ...newProduct, originalPrice: Number(e.target.value) })}
+                onChange={(e) =>
+                  setNewProduct({
+                    ...newProduct,
+                    originalPrice: Number(e.target.value),
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -792,8 +945,13 @@ const Products = () => {
                 fullWidth
                 label="Giá khuyến mãi"
                 type="number"
-                value={newProduct.salePrice || ''}
-                onChange={(e) => setNewProduct({ ...newProduct, salePrice: e.target.value ? Number(e.target.value) : null })}
+                value={newProduct.salePrice || ""}
+                onChange={(e) =>
+                  setNewProduct({
+                    ...newProduct,
+                    salePrice: e.target.value ? Number(e.target.value) : null,
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -802,7 +960,12 @@ const Products = () => {
                 label="Số lượng *"
                 type="number"
                 value={newProduct.quantity}
-                onChange={(e) => setNewProduct({ ...newProduct, quantity: Number(e.target.value) })}
+                onChange={(e) =>
+                  setNewProduct({
+                    ...newProduct,
+                    quantity: Number(e.target.value),
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -810,7 +973,12 @@ const Products = () => {
                 control={
                   <Switch
                     checked={newProduct.isOnSale}
-                    onChange={(e) => setNewProduct({ ...newProduct, isOnSale: e.target.checked })}
+                    onChange={(e) =>
+                      setNewProduct({
+                        ...newProduct,
+                        isOnSale: e.target.checked,
+                      })
+                    }
                   />
                 }
                 label="Đang khuyến mãi"
@@ -821,7 +989,9 @@ const Products = () => {
                 fullWidth
                 label="Thương hiệu"
                 value={newProduct.brandName}
-                onChange={(e) => setNewProduct({ ...newProduct, brandName: e.target.value })}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, brandName: e.target.value })
+                }
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -829,7 +999,9 @@ const Products = () => {
                 fullWidth
                 label="Danh mục"
                 value={newProduct.categoryName}
-                onChange={(e) => setNewProduct({ ...newProduct, categoryName: e.target.value })}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, categoryName: e.target.value })
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -839,7 +1011,9 @@ const Products = () => {
                 multiline
                 rows={3}
                 value={newProduct.description}
-                onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, description: e.target.value })
+                }
               />
             </Grid>
           </Grid>
@@ -848,9 +1022,9 @@ const Products = () => {
           <Button onClick={() => setOpenCreateDialog(false)} color="inherit">
             Hủy
           </Button>
-          <Button 
-            onClick={handleCreate} 
-            variant="contained" 
+          <Button
+            onClick={handleCreate}
+            variant="contained"
             disabled={loading || !newProduct.name}
           >
             Thêm sản phẩm
@@ -859,8 +1033,8 @@ const Products = () => {
       </Dialog>
 
       {/* Dialog cập nhật */}
-      <Dialog 
-        open={openUpdateDialog} 
+      <Dialog
+        open={openUpdateDialog}
         onClose={() => setOpenUpdateDialog(false)}
         maxWidth="md"
         fullWidth
@@ -876,16 +1050,26 @@ const Products = () => {
               <TextField
                 fullWidth
                 label="Tên sản phẩm *"
-                value={selectedProduct?.name || ''}
-                onChange={(e) => setSelectedProduct({ ...selectedProduct, name: e.target.value })}
+                value={selectedProduct?.name || ""}
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    name: e.target.value,
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 label="SKU"
-                value={selectedProduct?.sku || ''}
-                onChange={(e) => setSelectedProduct({ ...selectedProduct, sku: e.target.value })}
+                value={selectedProduct?.sku || ""}
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    sku: e.target.value,
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -894,7 +1078,12 @@ const Products = () => {
                 label="Giá gốc *"
                 type="number"
                 value={selectedProduct?.originalPrice || 0}
-                onChange={(e) => setSelectedProduct({ ...selectedProduct, originalPrice: Number(e.target.value) })}
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    originalPrice: Number(e.target.value),
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -902,8 +1091,13 @@ const Products = () => {
                 fullWidth
                 label="Giá khuyến mãi"
                 type="number"
-                value={selectedProduct?.salePrice || ''}
-                onChange={(e) => setSelectedProduct({ ...selectedProduct, salePrice: e.target.value ? Number(e.target.value) : null })}
+                value={selectedProduct?.salePrice || ""}
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    salePrice: e.target.value ? Number(e.target.value) : null,
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -912,7 +1106,12 @@ const Products = () => {
                 label="Số lượng *"
                 type="number"
                 value={selectedProduct?.quantity || 0}
-                onChange={(e) => setSelectedProduct({ ...selectedProduct, quantity: Number(e.target.value) })}
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    quantity: Number(e.target.value),
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -920,7 +1119,12 @@ const Products = () => {
                 control={
                   <Switch
                     checked={selectedProduct?.isOnSale || false}
-                    onChange={(e) => setSelectedProduct({ ...selectedProduct, isOnSale: e.target.checked })}
+                    onChange={(e) =>
+                      setSelectedProduct({
+                        ...selectedProduct,
+                        isOnSale: e.target.checked,
+                      })
+                    }
                   />
                 }
                 label="Đang khuyến mãi"
@@ -930,16 +1134,26 @@ const Products = () => {
               <TextField
                 fullWidth
                 label="Thương hiệu"
-                value={selectedProduct?.brandName || ''}
-                onChange={(e) => setSelectedProduct({ ...selectedProduct, brandName: e.target.value })}
+                value={selectedProduct?.brandName || ""}
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    brandName: e.target.value,
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 label="Danh mục"
-                value={selectedProduct?.categoryName || ''}
-                onChange={(e) => setSelectedProduct({ ...selectedProduct, categoryName: e.target.value })}
+                value={selectedProduct?.categoryName || ""}
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    categoryName: e.target.value,
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -948,8 +1162,13 @@ const Products = () => {
                 label="Mô tả ngắn"
                 multiline
                 rows={2}
-                value={selectedProduct?.shortDescription || ''}
-                onChange={(e) => setSelectedProduct({ ...selectedProduct, shortDescription: e.target.value })}
+                value={selectedProduct?.shortDescription || ""}
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    shortDescription: e.target.value,
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -958,8 +1177,13 @@ const Products = () => {
                 label="Mô tả chi tiết"
                 multiline
                 rows={3}
-                value={selectedProduct?.description || ''}
-                onChange={(e) => setSelectedProduct({ ...selectedProduct, description: e.target.value })}
+                value={selectedProduct?.description || ""}
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    description: e.target.value,
+                  })
+                }
               />
             </Grid>
           </Grid>
@@ -968,9 +1192,9 @@ const Products = () => {
           <Button onClick={() => setOpenUpdateDialog(false)} color="inherit">
             Hủy
           </Button>
-          <Button 
-            onClick={handleUpdate} 
-            variant="contained" 
+          <Button
+            onClick={handleUpdate}
+            variant="contained"
             disabled={loading || !selectedProduct?.name}
           >
             Cập nhật
@@ -979,8 +1203,8 @@ const Products = () => {
       </Dialog>
 
       {/* Dialog xem chi tiết */}
-      <Dialog 
-        open={openViewDialog} 
+      <Dialog
+        open={openViewDialog}
         onClose={() => setOpenViewDialog(false)}
         maxWidth="md"
         fullWidth
@@ -995,8 +1219,22 @@ const Products = () => {
             <Box sx={{ mt: 2 }}>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                    <Avatar sx={{ width: 60, height: 60, bgcolor: 'primary.main', fontSize: '1.5rem' }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                      mb: 2,
+                    }}
+                  >
+                    <Avatar
+                      sx={{
+                        width: 60,
+                        height: 60,
+                        bgcolor: "primary.main",
+                        fontSize: "1.5rem",
+                      }}
+                    >
                       {selectedProduct.name?.charAt(0)?.toUpperCase()}
                     </Avatar>
                     <Box>
@@ -1004,16 +1242,21 @@ const Products = () => {
                         {selectedProduct.name}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        ID: {selectedProduct.id} | SKU: {selectedProduct.sku || 'N/A'}
+                        ID: {selectedProduct.id} | SKU:{" "}
+                        {selectedProduct.sku || "N/A"}
                       </Typography>
                     </Box>
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Box sx={{ textAlign: 'right' }}>
+                  <Box sx={{ textAlign: "right" }}>
                     <Chip
-                      label={selectedProduct.isOnSale ? 'Đang khuyến mãi' : 'Không khuyến mãi'}
-                      color={selectedProduct.isOnSale ? 'success' : 'default'}
+                      label={
+                        selectedProduct.isOnSale
+                          ? "Đang khuyến mãi"
+                          : "Không khuyến mãi"
+                      }
+                      color={selectedProduct.isOnSale ? "success" : "default"}
                       sx={{ mb: 1 }}
                     />
                     <br />
@@ -1024,13 +1267,19 @@ const Products = () => {
                   </Box>
                 </Grid>
               </Grid>
-              
+
               <Divider sx={{ my: 3 }} />
-              
+
               <Grid container spacing={3}>
                 <Grid item xs={12} md={4}>
-                  <Paper sx={{ p: 2, textAlign: 'center', bgcolor: 'primary.50' }}>
-                    <Typography variant="h4" color="primary.main" fontWeight="bold">
+                  <Paper
+                    sx={{ p: 2, textAlign: "center", bgcolor: "primary.50" }}
+                  >
+                    <Typography
+                      variant="h4"
+                      color="primary.main"
+                      fontWeight="bold"
+                    >
                       {formatPrice(selectedProduct.originalPrice)}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
@@ -1039,13 +1288,27 @@ const Products = () => {
                   </Paper>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <Paper sx={{ p: 2, textAlign: 'center', bgcolor: selectedProduct.salePrice ? 'error.50' : 'grey.50' }}>
-                    <Typography 
-                      variant="h4" 
-                      color={selectedProduct.salePrice ? 'error.main' : 'text.secondary'} 
+                  <Paper
+                    sx={{
+                      p: 2,
+                      textAlign: "center",
+                      bgcolor: selectedProduct.salePrice
+                        ? "error.50"
+                        : "grey.50",
+                    }}
+                  >
+                    <Typography
+                      variant="h4"
+                      color={
+                        selectedProduct.salePrice
+                          ? "error.main"
+                          : "text.secondary"
+                      }
                       fontWeight="bold"
                     >
-                      {selectedProduct.salePrice ? formatPrice(selectedProduct.salePrice) : 'N/A'}
+                      {selectedProduct.salePrice
+                        ? formatPrice(selectedProduct.salePrice)
+                        : "N/A"}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       Giá khuyến mãi
@@ -1053,8 +1316,14 @@ const Products = () => {
                   </Paper>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <Paper sx={{ p: 2, textAlign: 'center', bgcolor: 'success.50' }}>
-                    <Typography variant="h4" color="success.main" fontWeight="bold">
+                  <Paper
+                    sx={{ p: 2, textAlign: "center", bgcolor: "success.50" }}
+                  >
+                    <Typography
+                      variant="h4"
+                      color="success.main"
+                      fontWeight="bold"
+                    >
                       {selectedProduct.quantity}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
@@ -1063,43 +1332,63 @@ const Products = () => {
                   </Paper>
                 </Grid>
               </Grid>
-              
+
               <Divider sx={{ my: 3 }} />
-              
+
               <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    gutterBottom
+                  >
                     Thông tin sản phẩm
                   </Typography>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  <Box
+                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                  >
                     <Typography variant="body2">
-                      <strong>Thương hiệu:</strong> {selectedProduct.brandName || 'Chưa có'}
+                      <strong>Thương hiệu:</strong>{" "}
+                      {selectedProduct.brandName || "Chưa có"}
                     </Typography>
                     <Typography variant="body2">
-                      <strong>Danh mục:</strong> {selectedProduct.categoryName || 'Chưa phân loại'}
+                      <strong>Danh mục:</strong>{" "}
+                      {selectedProduct.categoryName || "Chưa phân loại"}
                     </Typography>
                     <Typography variant="body2">
-                      <strong>Nhà cung cấp:</strong> {selectedProduct.supplierName || 'Chưa có'}
+                      <strong>Nhà cung cấp:</strong>{" "}
+                      {selectedProduct.supplierName || "Chưa có"}
                     </Typography>
                     <Typography variant="body2">
-                      <strong>% Giảm giá:</strong> {selectedProduct.discountPercent || 0}%
+                      <strong>% Giảm giá:</strong>{" "}
+                      {selectedProduct.discountPercent || 0}%
                     </Typography>
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    gutterBottom
+                  >
                     Mô tả
                   </Typography>
                   <Typography variant="body2" paragraph>
-                    <strong>Mô tả ngắn:</strong> {selectedProduct.shortDescription || 'Chưa có mô tả ngắn'}
+                    <strong>Mô tả ngắn:</strong>{" "}
+                    {selectedProduct.shortDescription || "Chưa có mô tả ngắn"}
                   </Typography>
                   <Typography variant="body2">
-                    <strong>Mô tả chi tiết:</strong> {selectedProduct.description || 'Chưa có mô tả chi tiết'}
+                    <strong>Mô tả chi tiết:</strong>{" "}
+                    {selectedProduct.description || "Chưa có mô tả chi tiết"}
                   </Typography>
                 </Grid>
                 {selectedProduct.ingredients && (
                   <Grid item xs={12}>
-                    <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="bold"
+                      gutterBottom
+                    >
                       Thành phần
                     </Typography>
                     <Typography variant="body2">
@@ -1109,7 +1398,11 @@ const Products = () => {
                 )}
                 {selectedProduct.usage && (
                   <Grid item xs={12}>
-                    <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="bold"
+                      gutterBottom
+                    >
                       Cách sử dụng
                     </Typography>
                     <Typography variant="body2">
@@ -1125,11 +1418,11 @@ const Products = () => {
           <Button onClick={() => setOpenViewDialog(false)} color="inherit">
             Đóng
           </Button>
-          <Button 
+          <Button
             onClick={() => {
               setOpenViewDialog(false);
               setOpenUpdateDialog(true);
-            }} 
+            }}
             variant="contained"
             startIcon={<EditIcon />}
           >
@@ -1139,8 +1432,8 @@ const Products = () => {
       </Dialog>
 
       {/* Dialog xác nhận xóa */}
-      <Dialog 
-        open={openDeleteDialog} 
+      <Dialog
+        open={openDeleteDialog}
         onClose={() => setOpenDeleteDialog(false)}
         maxWidth="sm"
         fullWidth
@@ -1155,7 +1448,8 @@ const Products = () => {
             Hành động này không thể hoàn tác!
           </Alert>
           <Typography>
-            Bạn có chắc chắn muốn xóa sản phẩm <strong>"{selectedProduct?.name}"</strong>?
+            Bạn có chắc chắn muốn xóa sản phẩm{" "}
+            <strong>"{selectedProduct?.name}"</strong>?
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
             Tất cả dữ liệu liên quan đến sản phẩm này sẽ bị xóa vĩnh viễn.
@@ -1165,9 +1459,9 @@ const Products = () => {
           <Button onClick={() => setOpenDeleteDialog(false)} color="inherit">
             Hủy
           </Button>
-          <Button 
-            onClick={handleDelete} 
-            variant="contained" 
+          <Button
+            onClick={handleDelete}
+            variant="contained"
             color="error"
             disabled={loading}
             startIcon={<DeleteIcon />}
@@ -1182,10 +1476,10 @@ const Products = () => {
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
-        <Alert 
-          onClose={() => setSnackbar({ ...snackbar, open: false })} 
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
           severity={snackbar.severity}
           variant="filled"
         >
