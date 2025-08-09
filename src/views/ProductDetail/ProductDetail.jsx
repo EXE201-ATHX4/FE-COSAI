@@ -32,7 +32,7 @@ import {
   Circle as CircleIcon,
 } from "@mui/icons-material";
 import ProductImageGallery from "./ProductImageGallery";
-import { products } from "../ListProduct/data/products";
+import productService from "../../service/product";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
 import Chatbox from "../Cosai/ChatBox";
@@ -40,98 +40,115 @@ import Chatbox from "../Cosai/ChatBox";
 function ProductDetailPage() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (id) {
-      const foundProduct = products.find((p) => p.id === id);
-      if (foundProduct) {
-        setProduct(foundProduct);
-      } else {
-        // Redirect to home page if product not found
-        window.location.href = "/";
+    const fetchProductAndRelated = async () => {
+      try {
+        // Fetch current product
+        const productResponse = await productService.getProductById(id);
+        const { data } = productResponse;
+        const productData = {
+          id: data.id,
+          name: data.name,
+          price: data.salePrice || data.originalPrice,
+          originalPrice: data.originalPrice,
+          rating: data.rating || 0,
+          reviewCount: data.reviewCount || 0,
+          images: data.productImages || ["/placeholder.svg"],
+          supplierName: data.supplierName || "Không xác định",
+          category: data.categoryName || "Không xác định",
+          volume: data.volume || "Không xác định",
+          description: data.description || "",
+          ingredients: data.ingredients || "Không có thông tin",
+          usage: data.usage || "Không có thông tin",
+          quantity: data.quantity || 0,
+        };
+        setProduct(productData);
+
+        // Fetch all products and filter by categoryName
+        const productsResponse = await productService.getProducts(1, 100); // Fetch up to 100 products
+        const relatedProductsData = productsResponse.data.items
+          .filter(
+            (p) => p.categoryName === data.categoryName && p.id !== data.id
+          )
+          .slice(0, 4)
+          .map((p) => ({
+            id: p.id,
+            name: p.name,
+            price: p.salePrice || p.originalPrice,
+            image: p.productImages?.[0] || "/placeholder.svg",
+          }));
+        setRelatedProducts(relatedProductsData);
+      } catch (error) {
+        console.error("Error fetching product or related products:", error);
+        navigate("/");
       }
+    };
+
+    if (id) {
+      fetchProductAndRelated();
     }
-  }, [id]);
+  }, [id, navigate]);
 
   const handleQuantityChange = (amount) => {
     const newQuantity = quantity + amount;
-    if (newQuantity >= 1) {
+    if (newQuantity >= 1 && newQuantity <= product.quantity) {
       setQuantity(newQuantity);
     }
   };
 
-  // Hàm thêm sản phẩm vào giỏ hàng
   const addToCart = () => {
-    if (!product) return;
+    if (!product || product.quantity === 0) return;
 
     try {
-      // Lấy giỏ hàng hiện tại từ localStorage
       const existingCart = JSON.parse(localStorage.getItem("cart") || "[]");
-
-      // Tạo item sản phẩm mới
       const cartItem = {
         id: product.id,
         name: product.name,
-        price: product.salePrice || product.price,
-        originalPrice: product.price,
-        image: product.image,
-        brand: product.brand,
+        price: product.price,
+        originalPrice: product.originalPrice,
+        image: product.images[0],
+        supplierName: product.supplierName,
         volume: product.volume,
         quantity: quantity,
         addedAt: new Date().toISOString(),
       };
 
-      // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
       const existingItemIndex = existingCart.findIndex(
         (item) => item.id === product.id
       );
 
       if (existingItemIndex !== -1) {
-        // Nếu sản phẩm đã có, cập nhật số lượng
         existingCart[existingItemIndex].quantity += quantity;
       } else {
-        // Nếu chưa có, thêm sản phẩm mới
         existingCart.push(cartItem);
       }
 
-      // Lưu lại vào localStorage
       localStorage.setItem("cart", JSON.stringify(existingCart));
-
-      // Hiển thị thông báo thành công
       setOpenSnackbar(true);
-
-      // Reset số lượng về 1
       setQuantity(1);
-
-      console.log("Đã thêm vào giỏ hàng:", cartItem);
-      console.log("Giỏ hàng hiện tại:", existingCart);
     } catch (error) {
       console.error("Lỗi khi thêm vào giỏ hàng:", error);
       alert("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!");
     }
   };
 
-  // Hàm mua ngay
   const buyNow = () => {
-    // Thêm vào giỏ hàng trước
     addToCart();
-
-
-    const accessToken = localStorage.getItem("accessToken")
-    const refreshToken = localStorage.getItem("refreshToken")
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
     if (!accessToken && !refreshToken) {
       navigate("/login");
-    }else{
-      navigate("/cart")
+    } else {
+      navigate("/cart");
     }
-    
   };
 
-  // Hàm đóng thông báo
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -158,7 +175,6 @@ function ProductDetailPage() {
     <Box sx={{ bgcolor: "#f9f7f2", minHeight: "100vh" }}>
       <Header />
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        {/* Breadcrumbs */}
         <Breadcrumbs
           separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"
@@ -172,34 +188,33 @@ function ProductDetailPage() {
           >
             Sản phẩm
           </Link>
-          <Link component={RouterLink} to="/" color="inherit" underline="hover">
-            {product.brand}
-          </Link>
-          <Link component={RouterLink} to="/" color="inherit" underline="hover">
+          <Link
+            component={RouterLink}
+            to={`/products?category=${encodeURIComponent(product.category)}`}
+            color="inherit"
+            underline="hover"
+          >
             {product.category}
           </Link>
           <Typography color="text.primary">{product.name}</Typography>
         </Breadcrumbs>
 
         <Grid container spacing={4}>
-          {/* Product Images */}
           <Grid item size={{ xs: 12, md: 6 }}>
             <ProductImageGallery images={product.images} />
           </Grid>
 
-          {/* Product Info */}
           <Grid item size={{ xs: 12, md: 6 }}>
             <Box sx={{ p: { xs: 2, md: 3 } }}>
-              {/* Brand & Product Name */}
               <Box sx={{ mb: 3 }}>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                   <Box
                     component="img"
                     src={
-                      product.brandImage ||
+                      product.supplierImage ||
                       "/placeholder.svg?height=40&width=40"
                     }
-                    alt={product.brand}
+                    alt={product.supplierName}
                     sx={{
                       width: 50,
                       height: 50,
@@ -219,7 +234,7 @@ function ProductDetailPage() {
                         letterSpacing: 1,
                       }}
                     >
-                      {product.brand}
+                      {product.supplierName}
                     </Typography>
                     <Typography
                       variant="h4"
@@ -236,7 +251,6 @@ function ProductDetailPage() {
                   </Box>
                 </Box>
 
-                {/* Rating & Reviews */}
                 <Box
                   sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}
                 >
@@ -267,7 +281,6 @@ function ProductDetailPage() {
                 </Box>
               </Box>
 
-              {/* Price Section */}
               <Box
                 sx={{
                   mb: 4,
@@ -340,7 +353,6 @@ function ProductDetailPage() {
                 </Box>
               </Box>
 
-              {/* Product Details */}
               <Box sx={{ mb: 4 }}>
                 <Box
                   sx={{
@@ -371,7 +383,6 @@ function ProductDetailPage() {
                 </Box>
               </Box>
 
-              {/* Quantity Selector */}
               <Box sx={{ mb: 4 }}>
                 <Typography
                   variant="h6"
@@ -424,6 +435,9 @@ function ProductDetailPage() {
                     <IconButton
                       size="medium"
                       onClick={() => handleQuantityChange(1)}
+                      disabled={
+                        product.quantity === 0 || quantity >= product.quantity
+                      }
                       sx={{
                         color: "#0a5c36",
                         "&:hover": { bgcolor: "#e8f5e8" },
@@ -435,18 +449,20 @@ function ProductDetailPage() {
                     </IconButton>
                   </Box>
                   <Typography variant="body2" sx={{ color: "#666", ml: 2 }}>
-                    Còn hàng
+                    {product.quantity > 0
+                      ? `Còn ${product.quantity} hàng`
+                      : "Hết hàng"}
                   </Typography>
                 </Box>
               </Box>
 
-              {/* Action Buttons */}
               <Box sx={{ mb: 4 }}>
                 <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
                   <Button
                     variant="outlined"
                     startIcon={<AddIcon />}
                     onClick={addToCart}
+                    disabled={product.quantity === 0}
                     sx={{
                       flex: 1,
                       borderColor: "#0a5c36",
@@ -486,6 +502,7 @@ function ProductDetailPage() {
                   variant="contained"
                   fullWidth
                   onClick={buyNow}
+                  disabled={product.quantity === 0}
                   sx={{
                     bgcolor: "#0a5c36",
                     "&:hover": { bgcolor: "#084c2d" },
@@ -501,7 +518,6 @@ function ProductDetailPage() {
                 </Button>
               </Box>
 
-              {/* Share & Features */}
               <Box sx={{ mb: 4 }}>
                 <Box
                   sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
@@ -535,97 +551,34 @@ function ProductDetailPage() {
                 </Box>
               </Box>
 
-              {/* Product Features - Dynamic */}
-              {product.features && product.features.length > 0 && (
-                <Box sx={{ mb: 4 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{ mb: 2, color: "#2d3748", fontWeight: "600" }}
-                  >
-                    Đặc điểm nổi bật
-                  </Typography>
-                  <Box
-                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
-                  >
-                    {product.features.map((feature, index) => (
-                      <Box
-                        key={index}
-                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
-                      >
-                        <Box
-                          sx={{
-                            width: 6,
-                            height: 6,
-                            bgcolor: "#0a5c36",
-                            borderRadius: "50%",
-                          }}
-                        />
-                        <Typography variant="body2" sx={{ color: "#666" }}>
-                          {feature}
-                        </Typography>
-                      </Box>
-                    ))}
-                  </Box>
-                </Box>
-              )}
-
-              {/* Return Policy - Dynamic */}
-              {product.returnPolicy && (
-                <Box
-                  sx={{
-                    p: 3,
-                    bgcolor: "#f0f8f4",
-                    borderRadius: 3,
-                    border: "1px solid #e8f5e8",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 2,
-                      mb: 2,
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        width: 32,
-                        height: 32,
-                        bgcolor: "#0a5c36",
-                        borderRadius: "50%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "#fff", fontWeight: "bold" }}
-                      >
-                        ✓
-                      </Typography>
-                    </Box>
-                    <Typography
-                      variant="h6"
-                      sx={{ color: "#0a5c36", fontWeight: "bold" }}
-                    >
-                      {product.returnPolicy.title || "Chính sách đổi trả"}
-                    </Typography>
-                  </Box>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: "#2d3748", lineHeight: 1.6 }}
-                  >
-                    {product.returnPolicy.description || product.returnPolicy}
-                  </Typography>
-                </Box>
-              )}
+              <Box sx={{ mb: 4 }}>
+                <List>
+                  {[
+                    "Cam kết chính hãng 100%",
+                    "Giao hàng tận nơi trên toàn quốc",
+                    "Đổi trả dễ dàng trong 7 ngày",
+                    "Tư vấn miễn phí bởi chuyên gia",
+                  ].map((item, index) => (
+                    <ListItem key={index} disablePadding>
+                      <ListItemIcon>
+                        <CircleIcon sx={{ color: "#0a5c36", fontSize: 10 }} />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item}
+                        primaryTypographyProps={{
+                          variant: "body2",
+                          sx: { color: "#2d3748", fontWeight: "500" },
+                        }}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
             </Box>
           </Grid>
         </Grid>
-        {/* Product Details Tabs */}
+
         <Box sx={{ mt: 6 }}>
-          {/* Tab Navigation */}
           <Box
             sx={{
               borderBottom: 1,
@@ -714,7 +667,6 @@ function ProductDetailPage() {
             </Box>
           </Box>
 
-          {/* Tab Content */}
           <Box
             sx={{
               minHeight: "400px",
@@ -722,7 +674,6 @@ function ProductDetailPage() {
               overflow: "hidden",
             }}
           >
-            {/* Description Tab */}
             <Box
               sx={{
                 opacity: activeTab === "description" ? 1 : 0,
@@ -773,7 +724,6 @@ function ProductDetailPage() {
                   </Box>
                   Thông tin sản phẩm
                 </Typography>
-
                 <Typography
                   variant="body1"
                   sx={{
@@ -786,53 +736,9 @@ function ProductDetailPage() {
                 >
                   {product.description}
                 </Typography>
-
-                <Box sx={{ display: "grid", gap: 2 }}>
-                  {product.freeFrom?.map((item, index) => (
-                    <Box
-                      key={index}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                        p: 2,
-                        bgcolor: "#f0f8f4",
-                        borderRadius: 2,
-                        border: "1px solid #e8f5e8",
-                        transition: "all 0.2s ease",
-                        "&:hover": {
-                          bgcolor: "#e8f5e8",
-                          transform: "translateX(4px)",
-                        },
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          width: 20,
-                          height: 20,
-                          borderRadius: "50%",
-                          bgcolor: "#0a5c36",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: "0.8rem",
-                        }}
-                      >
-                        ✓
-                      </Box>
-                      <Typography
-                        variant="body1"
-                        sx={{ color: "#2d3748", fontWeight: "500" }}
-                      >
-                        {item}
-                      </Typography>
-                    </Box>
-                  ))}
-                </Box>
               </Box>
             </Box>
 
-            {/* Ingredients Tab */}
             <Box
               sx={{
                 opacity: activeTab === "ingredients" ? 1 : 0,
@@ -883,62 +789,21 @@ function ProductDetailPage() {
                   </Box>
                   Thành phần chính
                 </Typography>
-
-                <Grid container spacing={3}>
-                  {product.ingredients?.map((ingredient, index) => (
-                    <Grid item size={{ xs: 12, md: 6 }} key={index}>
-                      <Box
-                        sx={{
-                          p: 3,
-                          borderRadius: 3,
-                          bgcolor: "#f0f8f4",
-                          border: "1px solid #e8f5e8",
-                          height: "100%",
-                          transition: "all 0.3s ease",
-                          "&:hover": {
-                            transform: "translateY(-2px)",
-                            boxShadow: "0 8px 25px rgba(10, 92, 54, 0.1)",
-                          },
-                        }}
-                      >
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontWeight: "bold",
-                            mb: 2,
-                            color: "#0a5c36",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1,
-                          }}
-                        >
-                          <Box
-                            sx={{
-                              width: 8,
-                              height: 8,
-                              borderRadius: "50%",
-                              bgcolor: "#0a5c36",
-                            }}
-                          />
-                          {ingredient.name}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            color: "#2d3748",
-                            lineHeight: 1.6,
-                          }}
-                        >
-                          {ingredient.description}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                  ))}
-                </Grid>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontWeight: "500",
+                    mb: 4,
+                    color: "#2d3748",
+                    lineHeight: 1.7,
+                    fontSize: "1.1rem",
+                  }}
+                >
+                  {product.ingredients}
+                </Typography>
               </Box>
             </Box>
 
-            {/* Usage Tab */}
             <Box
               sx={{
                 opacity: activeTab === "usage" ? 1 : 0,
@@ -987,125 +852,21 @@ function ProductDetailPage() {
                   </Box>
                   Cách sử dụng
                 </Typography>
-
-                <Box
+                <Typography
+                  variant="body1"
                   sx={{
-                    p: 3,
-                    borderRadius: 3,
-                    bgcolor: "#f0f8f4",
-                    border: "1px solid #e8f5e8",
+                    fontWeight: "500",
                     mb: 4,
+                    color: "#2d3748",
+                    lineHeight: 1.7,
+                    fontSize: "1.1rem",
                   }}
                 >
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: "bold",
-                      mb: 2,
-                      color: "#0a5c36",
-                    }}
-                  >
-                    Hướng dẫn sử dụng
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{ color: "#2d3748", lineHeight: 1.7 }}
-                  >
-                    {product.usage}
-                  </Typography>
-                </Box>
-
-                {product.usageDetails && (
-                  <Grid container spacing={3}>
-                    <Grid item size={{ xs: 12, md: 4 }}>
-                      <Box
-                        sx={{
-                          p: 3,
-                          borderRadius: 3,
-                          bgcolor: "#fff",
-                          border: "1px solid #e8f5e8",
-                          textAlign: "center",
-                          transition: "all 0.3s ease",
-                          "&:hover": {
-                            transform: "translateY(-2px)",
-                            boxShadow: "0 8px 25px rgba(10, 92, 54, 0.1)",
-                          },
-                        }}
-                      >
-                        <Box sx={{ fontSize: "2rem", mb: 2 }}>📏</Box>
-                        <Typography
-                          variant="h6"
-                          sx={{ fontWeight: "bold", mb: 1, color: "#0a5c36" }}
-                        >
-                          Lượng dùng
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: "#2d3748" }}>
-                          {product.usageDetails.amount}
-                        </Typography>
-                      </Box>
-                    </Grid>
-
-                    <Grid item size={{ xs: 12, md: 4 }}>
-                      <Box
-                        sx={{
-                          p: 3,
-                          borderRadius: 3,
-                          bgcolor: "#fff",
-                          border: "1px solid #e8f5e8",
-                          textAlign: "center",
-                          transition: "all 0.3s ease",
-                          "&:hover": {
-                            transform: "translateY(-2px)",
-                            boxShadow: "0 8px 25px rgba(10, 92, 54, 0.1)",
-                          },
-                        }}
-                      >
-                        <Box sx={{ fontSize: "2rem", mb: 2 }}>🌿</Box>
-                        <Typography
-                          variant="h6"
-                          sx={{ fontWeight: "bold", mb: 1, color: "#0a5c36" }}
-                        >
-                          Mùi hương
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: "#2d3748" }}>
-                          {product.usageDetails.scent}
-                        </Typography>
-                      </Box>
-                    </Grid>
-
-                    <Grid item size={{ xs: 12, md: 4 }}>
-                      <Box
-                        sx={{
-                          p: 3,
-                          borderRadius: 3,
-                          bgcolor: "#fff",
-                          border: "1px solid #e8f5e8",
-                          textAlign: "center",
-                          transition: "all 0.3s ease",
-                          "&:hover": {
-                            transform: "translateY(-2px)",
-                            boxShadow: "0 8px 25px rgba(10, 92, 54, 0.1)",
-                          },
-                        }}
-                      >
-                        <Box sx={{ fontSize: "2rem", mb: 2 }}>⚠️</Box>
-                        <Typography
-                          variant="h6"
-                          sx={{ fontWeight: "bold", mb: 1, color: "#0a5c36" }}
-                        >
-                          Lưu ý
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: "#2d3748" }}>
-                          {product.usageDetails.note}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                )}
+                  {product.usage}
+                </Typography>
               </Box>
             </Box>
 
-            {/* Reviews Tab */}
             <Box
               sx={{
                 opacity: activeTab === "reviews" ? 1 : 0,
@@ -1343,7 +1104,6 @@ function ProductDetailPage() {
           </Box>
         </Box>
 
-        {/* Related Products */}
         <Box sx={{ mt: 8, mb: 6 }}>
           <Typography
             variant="h4"
@@ -1371,199 +1131,201 @@ function ProductDetailPage() {
           </Typography>
 
           <Grid container spacing={3}>
-            {products.slice(0, 4).map((relatedProduct) => (
-              <Grid
-                item
-                size={{ xs: 12, sm: 6, md: 3 }}
-                key={relatedProduct.id}
-              >
-                <Card
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    bgcolor: "#ffffff",
-                    borderRadius: 3,
-                    border: "1px solid #e8f5e8",
-                    transition: "all 0.3s ease-in-out",
-                    "&:hover": {
-                      transform: "translateY(-8px)",
-                      boxShadow: "0 16px 32px rgba(10, 92, 54, 0.15)",
-                      border: "1px solid #0a5c36",
-                    },
-                    cursor: "pointer",
-                    overflow: "hidden",
-                    position: "relative",
-                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
-                  }}
-                  onClick={() =>
-                    (window.location.href = `/product/${relatedProduct.id}`)
-                  }
+            {relatedProducts.length > 0 ? (
+              relatedProducts.map((relatedProduct) => (
+                <Grid
+                  item
+                  size={{ xs: 12, sm: 6, md: 3 }}
+                  key={relatedProduct.id}
                 >
-                  {/* Image Container with Gradient Overlay */}
-                  <Box
+                  <Card
                     sx={{
-                      position: "relative",
-                      p: 3,
+                      height: "100%",
                       display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: 200,
-                      background:
-                        "linear-gradient(135deg, #f8fcf8 0%, #e8f5e8 100%)",
-                      "&::before": {
-                        content: '""',
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        background:
-                          "linear-gradient(45deg, transparent 0%, rgba(10, 92, 54, 0.03) 100%)",
-                        borderRadius: "12px 12px 0 0",
+                      flexDirection: "column",
+                      bgcolor: "#ffffff",
+                      borderRadius: 3,
+                      border: "1px solid #e8f5e8",
+                      transition: "all 0.3s ease-in-out",
+                      "&:hover": {
+                        transform: "translateY(-8px)",
+                        boxShadow: "0 16px 32px rgba(10, 92, 54, 0.15)",
+                        border: "1px solid #0a5c36",
                       },
+                      cursor: "pointer",
+                      overflow: "hidden",
+                      position: "relative",
+                      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
                     }}
+                    onClick={() =>
+                      (window.location.href = `/product/${relatedProduct.id}`)
+                    }
                   >
                     <Box
-                      component="img"
-                      src={relatedProduct.image || "/placeholder.svg"}
-                      alt={relatedProduct.name}
                       sx={{
-                        height: "100%",
-                        maxHeight: 160,
-                        objectFit: "contain",
-                        transition: "transform 0.3s ease-in-out",
-                        zIndex: 1,
                         position: "relative",
-                        filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))",
-                      }}
-                    />
-                  </Box>
-
-                  {/* Content */}
-                  <CardContent
-                    sx={{
-                      flexGrow: 1,
-                      p: 3,
-                      pt: 2,
-                      textAlign: "center",
-                      background: "#ffffff",
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      component="div"
-                      sx={{
-                        fontWeight: "600",
-                        mb: 2,
-                        height: "48px",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        color: "#2d3748",
-                        fontSize: "1rem",
-                        lineHeight: 1.2,
-                      }}
-                    >
-                      {relatedProduct.name}
-                    </Typography>
-
-                    {/* Price with Badge Style */}
-                    <Box
-                      sx={{
+                        p: 3,
                         display: "flex",
                         justifyContent: "center",
-                        mb: 2,
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          backgroundColor: "#0a5c36",
-                          color: "#ffffff",
-                          px: 2.5,
-                          py: 1,
-                          borderRadius: 25,
-                          fontWeight: "bold",
-                          fontSize: "1.1rem",
-                          boxShadow: "0 4px 12px rgba(10, 92, 54, 0.3)",
-                          position: "relative",
-                          "&::before": {
-                            content: '""',
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            background:
-                              "linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%)",
-                            borderRadius: 25,
-                          },
-                        }}
-                      >
-                        {new Intl.NumberFormat("vi-VN").format(
-                          relatedProduct.price
-                        )}
-                        đ
-                      </Box>
-                    </Box>
-
-                    {/* View Details Button */}
-                    <Box
-                      sx={{
-                        mt: 2,
-                        opacity: 0,
-                        transform: "translateY(10px)",
-                        transition: "all 0.3s ease-in-out",
-                        ".MuiCard-root:hover &": {
-                          opacity: 1,
-                          transform: "translateY(0)",
+                        alignItems: "center",
+                        height: 200,
+                        background:
+                          "linear-gradient(135deg, #f8fcf8 0%, #e8f5e8 100%)",
+                        "&::before": {
+                          content: '""',
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          background:
+                            "linear-gradient(45deg, transparent 0%, rgba(10, 92, 54, 0.03) 100%)",
+                          borderRadius: "12px 12px 0 0",
                         },
                       }}
                     >
-                      <Typography
-                        variant="body2"
+                      <Box
+                        component="img"
+                        src={relatedProduct.image}
+                        alt={relatedProduct.name}
                         sx={{
-                          color: "#0a5c36",
+                          height: "100%",
+                          maxHeight: 160,
+                          objectFit: "contain",
+                          transition: "transform 0.3s ease-in-out",
+                          zIndex: 1,
+                          position: "relative",
+                          filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))",
+                        }}
+                      />
+                    </Box>
+
+                    <CardContent
+                      sx={{
+                        flexGrow: 1,
+                        p: 3,
+                        pt: 2,
+                        textAlign: "center",
+                        background: "#ffffff",
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        component="div"
+                        sx={{
                           fontWeight: "600",
-                          textDecoration: "underline",
-                          textUnderlineOffset: "4px",
-                          fontSize: "0.875rem",
+                          mb: 2,
+                          height: "48px",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          color: "#2d3748",
+                          fontSize: "1rem",
+                          lineHeight: 1.2,
                         }}
                       >
-                        Xem chi tiết →
+                        {relatedProduct.name}
                       </Typography>
-                    </Box>
-                  </CardContent>
 
-                  {/* Floating Badge (Optional - for featured products) */}
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: 15,
-                      right: 15,
-                      backgroundColor: "#ff6b6b",
-                      color: "#ffffff",
-                      px: 1.5,
-                      py: 0.5,
-                      borderRadius: 2,
-                      fontSize: "0.75rem",
-                      fontWeight: "bold",
-                      textTransform: "uppercase",
-                      boxShadow: "0 2px 8px rgba(255, 107, 107, 0.4)",
-                      zIndex: 2,
-                    }}
-                  >
-                    Hot
-                  </Box>
-                </Card>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          mb: 2,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            backgroundColor: "#0a5c36",
+                            color: "#ffffff",
+                            px: 2.5,
+                            py: 1,
+                            borderRadius: 25,
+                            fontWeight: "bold",
+                            fontSize: "1.1rem",
+                            boxShadow: "0 4px 12px rgba(10, 92, 54, 0.3)",
+                            position: "relative",
+                            "&::before": {
+                              content: '""',
+                              position: "absolute",
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              background:
+                                "linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%)",
+                              borderRadius: 25,
+                            },
+                          }}
+                        >
+                          {new Intl.NumberFormat("vi-VN").format(
+                            relatedProduct.price
+                          )}
+                          đ
+                        </Box>
+                      </Box>
+
+                      <Box
+                        sx={{
+                          mt: 2,
+                          opacity: 0,
+                          transform: "translateY(10px)",
+                          transition: "all 0.3s ease-in-out",
+                          ".MuiCard-root:hover &": {
+                            opacity: 1,
+                            transform: "translateY(0)",
+                          },
+                        }}
+                      >
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: "#0a5c36",
+                            fontWeight: "600",
+                            textDecoration: "underline",
+                            textUnderlineOffset: "4px",
+                            fontSize: "0.875rem",
+                          }}
+                        >
+                          Xem chi tiết →
+                        </Typography>
+                      </Box>
+                    </CardContent>
+
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: 15,
+                        right: 15,
+                        backgroundColor: "#ff6b6b",
+                        color: "#ffffff",
+                        px: 1.5,
+                        py: 0.5,
+                        borderRadius: 2,
+                        fontSize: "0.75rem",
+                        fontWeight: "bold",
+                        textTransform: "uppercase",
+                        boxShadow: "0 2px 8px rgba(255, 107, 107, 0.4)",
+                        zIndex: 2,
+                      }}
+                    >
+                      Hot
+                    </Box>
+                  </Card>
+                </Grid>
+              ))
+            ) : (
+              <Grid item xs={12}>
+                <Typography variant="body1" sx={{ textAlign: "center" }}>
+                  Chưa có sản phẩm liên quan
+                </Typography>
               </Grid>
-            ))}
+            )}
           </Grid>
         </Box>
 
-        {/* Bottom Banner */}
         <Box sx={{ mt: 8, mb: 4, textAlign: "center" }}>
           <Typography
             variant="h5"
@@ -1587,7 +1349,6 @@ function ProductDetailPage() {
         </Box>
       </Container>
 
-      {/* Snackbar thông báo */}
       <Snackbar
         open={openSnackbar}
         autoHideDuration={3000}
