@@ -208,22 +208,6 @@ function ProductDetailPage() {
             <Box sx={{ p: { xs: 2, md: 3 } }}>
               <Box sx={{ mb: 3 }}>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                  <Box
-                    component="img"
-                    src={
-                      product.supplierImage ||
-                      "/placeholder.svg?height=40&width=40"
-                    }
-                    alt={product.supplierName}
-                    sx={{
-                      width: 50,
-                      height: 50,
-                      mr: 2,
-                      borderRadius: 2,
-                      border: "2px solid #e8f5e8",
-                      p: 0.5,
-                    }}
-                  />
                   <Box>
                     <Typography
                       variant="caption"
@@ -350,36 +334,6 @@ function ProductDetailPage() {
                       {product.price.toLocaleString()}đ
                     </Typography>
                   )}
-                </Box>
-              </Box>
-
-              <Box sx={{ mb: 4 }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 2,
-                    p: 2,
-                    bgcolor: "#f9f9f9",
-                    borderRadius: 2,
-                    mb: 3,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: 12,
-                      height: 12,
-                      bgcolor: "#0a5c36",
-                      borderRadius: "50%",
-                    }}
-                  />
-                  <Typography
-                    variant="body1"
-                    sx={{ fontWeight: "600", color: "#2d3748" }}
-                  >
-                    Dung tích:{" "}
-                    <span style={{ color: "#0a5c36" }}>{product.volume}</span>
-                  </Typography>
                 </Box>
               </Box>
 
