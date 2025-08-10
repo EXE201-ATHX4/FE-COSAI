@@ -9,7 +9,7 @@ import ConfirmationDialog from "./ConfirmationDialog";
 
 const Register = () => {
   const [activeTab, setActiveTab] = useState("email");
-  const [fullName, setFullName] = useState("");
+  const [Name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +24,7 @@ const Register = () => {
     let isValid = false;
     setErrorMessage("");
 
-    if (!fullName) {
+    if (!Name) {
       setErrorMessage("Vui lòng nhập họ và tên.");
     } else if (!password) {
       setErrorMessage("Vui lòng nhập mật khẩu.");
@@ -55,7 +55,7 @@ const Register = () => {
     }
 
     setIsFormValid(isValid);
-  }, [fullName, phone, email, password, confirmPassword, activeTab]);
+  }, [Name, phone, email, password, confirmPassword, activeTab]);
 
   // Handle form submission with API call
   const handleSubmit = async (e) => {
@@ -63,8 +63,8 @@ const Register = () => {
     if (isFormValid) {
       try {
         const payload = activeTab === "email" 
-          ? { email, password }
-          : { phone, password };
+          ? { Name,email, password }
+          : { Name,phone, password };
 
         const response = await axios.post(
           'https://be-cosai.onrender.com/api/auth/register',
@@ -129,12 +129,12 @@ const Register = () => {
             <div className="form-input-group">
               <input
                 type="text"
-                id="fullName"
+                id="Name"
                 className="form-input"
                 placeholder="Họ và tên"
                 aria-label="Họ và tên"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                value={Name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
 
