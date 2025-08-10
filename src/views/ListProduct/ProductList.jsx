@@ -68,13 +68,12 @@ function ProductList() {
   const productsPerPage = 8;
   const productsListRef = useRef(null);
 
-  // Fetch products from API
-
+  // Fetch products and categories from API
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
-        // pageSize = 1000 để lấy hết
+        // pageSize = 1000 to fetch all products
         const response = await productService.getProducts(1, 1000);
         const mappedProducts = response.data.items.map((item) => ({
           id: item.id,
@@ -88,7 +87,17 @@ function ProductList() {
           promotions: item.isOnSale ? ["Giảm giá"] : [],
         }));
 
+        // Extract unique categories from products
+        const uniqueCategories = [
+          ...new Set(
+            response.data.items
+              .map((item) => item.categoryName)
+              .filter((category) => category && category !== "")
+          ),
+        ].sort();
+
         setAllProducts(mappedProducts);
+        setCategories(uniqueCategories);
         setTotalItems(mappedProducts.length);
         setTotalPages(Math.ceil(mappedProducts.length / productsPerPage));
       } catch (error) {
@@ -99,6 +108,7 @@ function ProductList() {
     };
     fetchProducts();
   }, []);
+
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
 
@@ -106,8 +116,8 @@ function ProductList() {
     indexOfFirstProduct,
     indexOfLastProduct
   );
-  // Function to apply filters and sorting
 
+  // Function to apply filters and sorting
   const applyFiltersAndSort = () => {
     let result = [...allProducts];
 
@@ -144,12 +154,12 @@ function ProductList() {
     } else if (sortBy === "name-asc") {
       result.sort((a, b) => a.name.localeCompare(b.name));
     } else if (sortBy === "name-desc") {
-      result.sort((a, b) => b.name.localeCompare(a.name));
+      result.sort((a, b) => b.name.localeCompare(b.name));
     } else if (sortBy === "rating-desc") {
       result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
     }
 
-    // Cập nhật danh sách hiển thị + phân trang
+    // Update displayed products and pagination
     setDisplayedProducts(result);
     setTotalItems(result.length);
     setTotalPages(Math.ceil(result.length / productsPerPage));
