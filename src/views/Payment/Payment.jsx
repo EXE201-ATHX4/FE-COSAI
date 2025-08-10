@@ -229,7 +229,7 @@ const Payment = () => {
             </div>
             <div className="info-row full-address">
               <strong>Địa chỉ:</strong>
-              <span>{`${deliveryInfo.address}, ${deliveryInfo.ward}, ${deliveryInfo.district}, ${deliveryInfo.province}`}</span>
+              <span>{`${deliveryInfo.address}, ${deliveryInfo.district}, ${deliveryInfo.province}`}</span>
             </div>
             <h3>PHƯƠNG THỨC THANH TOÁN</h3>
             <div className="payment-options">
