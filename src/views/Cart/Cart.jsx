@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./Cart.css";
-import { Header } from "../../components/header"; // Assuming Header component exists
-import { Footer } from "../../components/footer"; // Assuming Footer component exists
+import { Header } from "../../components/header";
+import { Footer } from "../../components/footer";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const Cart = () => {
   const navigate = useNavigate();
 
-  // Initialize cartItems from localStorage or empty array
   const [cartItems, setCartItems] = useState(() => {
     const savedCart = localStorage.getItem("cart");
     return savedCart ? JSON.parse(savedCart) : [];
@@ -20,20 +19,19 @@ const Cart = () => {
     phone: "",
     email: "",
     address: "",
-    province: "", // Stores the 'code' from API
-    district: "", // Stores the 'code' from API
-    ward: "", // Stores the 'code' from API
+    province: "",
+    district: "",
+    // ward: "",
     saveDefault: false,
   });
   const [discountCode, setDiscountCode] = useState("");
   const [discountAmount, setDiscountAmount] = useState(0);
-
-  // States to hold the fetched location data
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
+  const [shippingFee, setShippingFee] = useState(0);
+  const [isCheckoutDisabled, setIsCheckoutDisabled] = useState(true);
 
-  // Check if user is logged in on component mount
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (!isLoggedIn) {
@@ -41,12 +39,10 @@ const Cart = () => {
     }
   }, [navigate]);
 
-  // Update localStorage whenever cartItems change
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // Derived state for selected items and subtotal
   const selectedItems = cartItems.filter((item) => item.selected);
   const subtotal = selectedItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -57,30 +53,26 @@ const Cart = () => {
     0
   );
 
-  // Calculate shipping fee conditionally
-  const [shippingFee, setShippingFee] = useState(0);
-
-  // State for checkout button disabled status
-  const [isCheckoutDisabled, setIsCheckoutDisabled] = useState(true);
-
-  // Effect to sync 'selectAll' checkbox with individual item selections
   useEffect(() => {
     setSelectAll(cartItems.every((item) => item.selected));
   }, [cartItems]);
 
-  // --- API Integration for Provinces, Districts, Wards ---
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
-        const response = await fetch("https://provinces.open-api.vn/api/p/");
+        const response = await fetch(
+          "https://esgoo.net/api-tinhthanh-new/1/0.htm"
+        );
         const data = await response.json();
-        setProvinces(data);
+        if (data.error === 0) {
+          setProvinces(data.data);
+        }
       } catch (error) {
         console.error("Error loading provinces:", error);
         setProvinces([
-          { code: 79, name: "TP. Hồ Chí Minh" },
-          { code: 1, name: "Hà Nội" },
-          { code: 48, name: "Đà Nẵng" },
+          { id: "13986", name: "Hồ Chí Minh" },
+          { id: "11404", name: "Hà Nội" },
+          { id: "13275", name: "Đà Nẵng" },
         ]);
       }
     };
@@ -91,36 +83,41 @@ const Cart = () => {
     if (shippingInfo.province) {
       const fetchDistricts = async () => {
         try {
+          const selectedProvince = provinces.find(
+            (p) => p.name === shippingInfo.province
+          );
+          if (!selectedProvince) return;
           const response = await fetch(
-            `https://provinces.open-api.vn/api/p/${shippingInfo.province}?depth=2`
+            `https://esgoo.net/api-tinhthanh-new/2/${selectedProvince.id}.htm`
           );
           const data = await response.json();
-          setDistricts(data.districts || []);
-          setWards([]);
-          setShippingInfo((prev) => ({ ...prev, district: "", ward: "" }));
+          if (data.error === 0) {
+            setDistricts(data.data || []);
+          }
+          setShippingInfo((prev) => ({ ...prev, district: "" }));
         } catch (error) {
           console.error("Error loading districts:", error);
           setDistricts([]);
-          setWards([]);
         }
       };
       fetchDistricts();
     } else {
       setDistricts([]);
-      setWards([]);
-      setShippingInfo((prev) => ({ ...prev, district: "", ward: "" }));
+      setShippingInfo((prev) => ({ ...prev, district: "" }));
     }
-  }, [shippingInfo.province]);
+  }, [shippingInfo.province, provinces]);
 
   useEffect(() => {
     if (shippingInfo.district) {
       const fetchWards = async () => {
         try {
           const response = await fetch(
-            `https://provinces.open-api.vn/api/d/${shippingInfo.district}?depth=2`
+            `https://esgoo.net/api-tinhthanh-new/3/${shippingInfo.district}.htm`
           );
           const data = await response.json();
-          setWards(data.wards || []);
+          if (data.error === 0) {
+            setWards(data.data || []);
+          }
           setShippingInfo((prev) => ({ ...prev, ward: "" }));
         } catch (error) {
           console.error("Error loading wards:", error);
@@ -134,7 +131,6 @@ const Cart = () => {
     }
   }, [shippingInfo.district]);
 
-  // Effect to calculate shipping fee
   useEffect(() => {
     const isShippingInfoComplete =
       shippingInfo.fullName &&
@@ -152,7 +148,6 @@ const Cart = () => {
     }
   }, [shippingInfo, selectedItems.length]);
 
-  // Effect to manage checkout button disabled state
   useEffect(() => {
     const areAllFieldsFilled =
       shippingInfo.fullName.trim() !== "" &&
@@ -160,8 +155,9 @@ const Cart = () => {
       shippingInfo.email.trim() !== "" &&
       shippingInfo.address.trim() !== "" &&
       shippingInfo.province !== "" &&
-      shippingInfo.district !== "" &&
-      shippingInfo.ward !== "";
+      shippingInfo.district !== "";
+    // &&
+    // shippingInfo.ward !== "";
 
     setIsCheckoutDisabled(!(selectedItems.length > 0 && areAllFieldsFilled));
   }, [shippingInfo, selectedItems.length]);
@@ -240,7 +236,6 @@ const Cart = () => {
         category: item.category,
       })),
       shippingInfo: shippingInfo,
-
       summary: {
         subtotal: subtotal,
         discountAmount: discountAmount,
@@ -271,12 +266,10 @@ const Cart = () => {
         style={{ background: "#f2eee5" }}
       >
         <div className="cart-page-container">
-          {/* Left Column: Displays cart items and actions */}
           <div className="cart-left-column">
             <div className="cart-header">
               <h2 className="cart-title">GIỎ HÀNG ({cartItems.length})</h2>
             </div>
-
             <div className="cart-table">
               <div className="table-header">
                 <div className="col-product">Sản phẩm</div>
@@ -285,7 +278,6 @@ const Cart = () => {
                 <div className="col-quantity">Số lượng</div>
                 <div className="col-total">Số tiền</div>
               </div>
-
               <div className="cart-items-wrapper">
                 {cartItems.length === 0 ? (
                   <div className="empty-cart-message">
@@ -309,24 +301,19 @@ const Cart = () => {
                             )}
                           </div>
                           <div className="product-details">
-                            <div className="brand-logo">
-                              {/* <img src={item.brand} alt="Brand" /> */}
-                            </div>
+                            <div className="brand-logo"></div>
                             <h4 className="product-name">{item.name}</h4>
                           </div>
                         </div>
                       </div>
-
                       <div className="col-unit">
                         <span className="unit-text">{item.volume}</span>
                       </div>
-
                       <div className="col-price">
                         <span className="price-text">
                           {formatPrice(item.price)}
                         </span>
                       </div>
-
                       <div className="col-quantity">
                         <div className="quantity-controls">
                           <button
@@ -345,7 +332,6 @@ const Cart = () => {
                           </button>
                         </div>
                       </div>
-
                       <div className="col-total">
                         <span className="total-price">
                           {formatPrice(item.price * item.quantity)}
@@ -363,7 +349,6 @@ const Cart = () => {
                 )}
               </div>
             </div>
-
             <div className="cart-footer">
               <div className="footer-left">
                 <label className="select-all">
@@ -381,7 +366,6 @@ const Cart = () => {
                   Xóa sản phẩm
                 </button>
               </div>
-
               <div className="footer-right">
                 <span className="total-summary">
                   Tổng thanh toán ({totalItems} sản phẩm):
@@ -391,7 +375,6 @@ const Cart = () => {
                 </span>
               </div>
             </div>
-
             <div className="cart-actions">
               <button
                 className="back-btn"
@@ -401,8 +384,6 @@ const Cart = () => {
               </button>
             </div>
           </div>
-
-          {/* Right Column: Contact Information and Order Summary */}
           <div className="cart-right-column">
             <div className="contact-info-section">
               <h3>Thông tin liên hệ</h3>
@@ -466,7 +447,7 @@ const Cart = () => {
                   >
                     <option value="">Chọn Tỉnh/Thành Phố</option>
                     {provinces.map((province) => (
-                      <option key={province.code} value={province.code}>
+                      <option key={province.id} value={province.name}>
                         {province.name}
                       </option>
                     ))}
@@ -475,7 +456,7 @@ const Cart = () => {
               </div>
               <div className="form-group-inline">
                 <div className="input-group">
-                  <label htmlFor="district">Quận/Huyện</label>
+                  <label htmlFor="district">Phường/Xã</label>
                   <select
                     id="district"
                     name="district"
@@ -484,15 +465,15 @@ const Cart = () => {
                     disabled={!shippingInfo.province || districts.length === 0}
                     required
                   >
-                    <option value="">Chọn Quận/Huyện</option>
+                    <option value="">Chọn Phường/Xã</option>
                     {districts.map((district) => (
-                      <option key={district.code} value={district.code}>
+                      <option key={district.id} value={district.name}>
                         {district.name}
                       </option>
                     ))}
                   </select>
                 </div>
-                <div className="input-group">
+                {/* <div className="input-group">
                   <label htmlFor="ward">Phường/Xã</label>
                   <select
                     id="ward"
@@ -504,12 +485,12 @@ const Cart = () => {
                   >
                     <option value="">Chọn Phường/Xã</option>
                     {wards.map((ward) => (
-                      <option key={ward.code} value={ward.code}>
+                      <option key={ward.id} value={ward.id}>
                         {ward.name}
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
               </div>
               <div className="form-group-full-width">
                 <label htmlFor="address">Địa chỉ chi tiết</label>
@@ -524,7 +505,6 @@ const Cart = () => {
                 />
               </div>
             </div>
-
             <div className="order-details-section">
               <h3>Chi tiết đơn hàng</h3>
               <div className="discount-input">
@@ -549,11 +529,11 @@ const Cart = () => {
               </div>
               <div className="order-summary-row">
                 <span>Phí vận chuyển:</span>
-                <span>0</span>
+                <span>{formatPrice(shippingFee)}</span>
               </div>
               <div className="order-summary-row total-row">
                 <span>Tổng tiền:</span>
-                <span>{formatPrice(subtotal)}</span>
+                <span>{formatPrice(finalTotal)}</span>
               </div>
               <button
                 onClick={handleCheckout}
