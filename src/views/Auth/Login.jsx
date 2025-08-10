@@ -37,33 +37,48 @@ const Login = () => {
       try {
         const payload = {
           emailAddress: phoneEmail,
-          password: password
+          password: password,
         };
 
         const response = await axios.post(
-          'https://be-cosai.onrender.com/api/auth/login',
+          "https://be-cosai.onrender.com/api/auth/login",
           payload,
           {
             headers: {
-              'accept': '*/*',
-              'Content-Type': 'application/json',
-            }
+              accept: "*/*",
+              "Content-Type": "application/json",
+            },
           }
         );
-
         const { accessToken, refreshToken, role } = response.data; // Giả định role có trong response
         if (accessToken && refreshToken) {
           localStorage.setItem("isLoggedIn", "true");
           localStorage.setItem("userEmail", phoneEmail);
-          localStorage.setItem("userName", "Gia Hưng");
           localStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
-          localStorage.setItem("role", role || "Customer"); 
+          localStorage.setItem("role", role || "Customer");
           setShowLoginSuccessDialog(true);
+        }
+        const res = await axios.get(
+          "https://be-cosai.onrender.com/api/user/info",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              accept: "*/*",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (res.data) {
+          localStorage.setItem("userName", res.data.data.userInfo.fullName);
+        }else{
+          localStorage.setItem("userName", "Khách hàng");
         }
       } catch (error) {
         if (error.response && error.response.data) {
-          setErrorMessage("Thông tin đăng nhập không chính xác. Vui lòng thử lại.");
+          setErrorMessage(
+            "Thông tin đăng nhập không chính xác. Vui lòng thử lại."
+          );
         } else {
           setErrorMessage("Đã có lỗi xảy ra. Vui lòng thử lại.");
         }
@@ -99,7 +114,10 @@ const Login = () => {
               />
             </div>
 
-            <div className="form-input-group" style={{ marginBottom: "1.5rem" }}>
+            <div
+              className="form-input-group"
+              style={{ marginBottom: "1.5rem" }}
+            >
               <input
                 type="password"
                 id="loginPassword"
@@ -128,7 +146,14 @@ const Login = () => {
             </div>
 
             {errorMessage && (
-              <p style={{ color: 'red', fontSize: '0.8rem', marginTop: '-1rem', marginBottom: '1rem' }}>
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "0.8rem",
+                  marginTop: "-1rem",
+                  marginBottom: "1rem",
+                }}
+              >
                 {errorMessage}
               </p>
             )}
