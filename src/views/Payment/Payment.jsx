@@ -71,8 +71,9 @@ const Payment = () => {
   const createOrderBody = () => {
     if (!orderData) return null;
     const { items, shippingInfo, summary } = orderData;
+    console.log("Creating order body with items:", items);
     const apiItems = items.map((item) => ({
-      id: 0, // Use 0 as per the provided body
+      id: item.id || 0, // Use 0 as per the provided body
       productName: item.name || "string",
       price: item.price || 10000,
       quantity: item.quantity || 1,
