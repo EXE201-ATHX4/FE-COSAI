@@ -273,7 +273,7 @@ const Cart = () => {
             <div className="cart-table">
               <div className="table-header">
                 <div className="col-product">Sản phẩm</div>
-                <div className="col-unit">Đơn vị tính</div>
+                {/* <div className="col-unit">Đơn vị tính</div> */}
                 <div className="col-price">Đơn giá</div>
                 <div className="col-quantity">Số lượng</div>
                 <div className="col-total">Số tiền</div>
@@ -306,9 +306,9 @@ const Cart = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-unit">
+                      {/* <div className="col-unit">
                         <span className="unit-text">{item.volume}</span>
-                      </div>
+                      </div> */}
                       <div className="col-price">
                         <span className="price-text">
                           {formatPrice(item.price)}

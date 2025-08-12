@@ -1,7 +1,7 @@
 /* General Styling */
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f7f8fc; /* Softer, slightly off-white background */
   overflow-y: auto; /* Allow scrolling for body if content exceeds viewport */
 }
@@ -29,7 +29,7 @@ body {
 
 /* Left Column - Cart Items */
 .cart-left-column {
-    width: 90%; /* Full width on smaller screens */
+  width: 90%; /* Full width on smaller screens */
   display: flex;
   flex-direction: column;
   gap: 15px; /* Reduced gap */
@@ -38,7 +38,7 @@ body {
 
 /* Right Column - Contact Info & Order Details */
 .cart-right-column {
-    width: 50%; /* Full width on smaller screens */
+  width: 50%; /* Full width on smaller screens */
   display: flex;
   flex-direction: column;
   gap: 15px; /* Reduced gap */
@@ -79,7 +79,7 @@ body {
   background: #329066; /* Keep the existing green for table header */
   color: white;
   display: grid;
-  grid-template-columns: 2.2fr 0.8fr 1fr 1fr 1.2fr; /* Adjusted column widths */
+  grid-template-columns: 2.5fr 1fr 1fr 1.2fr; /* Điều chỉnh tỷ lệ cột */
   padding: 12px; /* Reduced padding */
   font-weight: 600;
   font-size: 12.5px; /* Smaller font size */
@@ -120,8 +120,6 @@ body {
   background: #a0a0a0; /* Color of the scrollbar thumb on hover */
 }
 
-
-
 .empty-cart-message {
   text-align: center;
   padding: 30px 20px; /* Reduced padding */
@@ -131,7 +129,7 @@ body {
 
 .cart-item {
   display: grid;
-  grid-template-columns: 2.2fr 0.8fr 1fr 1fr 1.2fr; /* Matched table header columns */
+  grid-template-columns: 2.5fr 1fr 1fr 1.2fr; /* Phù hợp với table-header */
   padding: 14px 12px; /* Increased vertical padding for taller item rows */
   border-bottom: 1px solid #f5f5f5; /* Very light border */
   align-items: center;
@@ -493,7 +491,7 @@ body {
 
 /* Order Details Section */
 .discount-input {
-    color: #333;
+  color: #333;
   display: flex;
   margin-bottom: 12px; /* Reduced margin */
 }
@@ -528,7 +526,7 @@ body {
 }
 
 .note-input input {
-    color: #333;
+  color: #333;
   width: 100%;
   padding: 8px 9px; /* Consistent padding */
   border: 1px solid #ddd;
@@ -619,7 +617,7 @@ body {
     border: 1px solid #e0e0e0;
     border-radius: 6px; /* Slightly smaller border radius */
     margin-bottom: 8px; /* Reduced margin */
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
   }
 
   .product-info {
@@ -650,10 +648,22 @@ body {
     font-size: 13px; /* Consistent font size */
   }
 
-  .col-unit::before { content: "Đơn vị tính: "; font-weight: 600; color: #555; }
-  .col-price::before { content: "Đơn giá: "; font-weight: 600; color: #555; }
-  .col-quantity::before { content: "Số lượng: "; font-weight: 600; color: #555; }
-  .col-total::before { content: "Số tiền: "; font-weight: 600; color: #555; }
+  /* .col-unit::before { content: "Đơn vị tính: "; font-weight: 600; color: #555; } */
+  .col-price::before {
+    content: "Đơn giá: ";
+    font-weight: 600;
+    color: #555;
+  }
+  .col-quantity::before {
+    content: "Số lượng: ";
+    font-weight: 600;
+    color: #555;
+  }
+  .col-total::before {
+    content: "Số tiền: ";
+    font-weight: 600;
+    color: #555;
+  }
 
   .quantity-controls {
     flex-grow: 1; /* Allow controls to fill space */
@@ -679,7 +689,8 @@ body {
     gap: 8px; /* Reduced gap */
   }
 
-  .select-all, .delete-selected {
+  .select-all,
+  .delete-selected {
     font-size: 12.5px;
   }
 
